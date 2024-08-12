@@ -75,6 +75,14 @@ export default function Generate() {
     }
   }
 
+{flashcards.length > 0 && (
+  <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+    <Button variant="contained" color="primary" onClick={handleOpenDialog}>
+      Save Flashcards
+    </Button>
+  </Box>
+)}
+
   return (
     <Container maxWidth="md">
       <Box sx={{ my: 4 }}>
