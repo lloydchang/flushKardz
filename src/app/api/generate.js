@@ -14,3 +14,10 @@ You should return in the following JSON format:
   ]
 }
 `
+
+export async function POST(req) {
+    const openai = new OpenAI()
+    const data = await req.text()
+  
+    // We'll implement the OpenAI API call here
+  }
