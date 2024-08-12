@@ -10,6 +10,8 @@ import {
 } from '@mui/material'
 
 export default function Generate() {
+  const [setName, setSetName] = useState('')
+  const [dialogOpen, setDialogOpen] = useState(false)
   const [text, setText] = useState('')
   const [flashcards, setFlashcards] = useState([])
 
