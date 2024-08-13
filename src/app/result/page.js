@@ -39,3 +39,13 @@ const ResultPage = () => {
       </Container>
     )
   }
+
+  if (error) {
+    return (
+      <Container maxWidth="sm" sx={{textAlign: 'center', mt: 4}}>
+        <Typography variant="h6" color="error">
+          {error}
+        </Typography>
+      </Container>
+    )
+  }
