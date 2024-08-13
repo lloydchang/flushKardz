@@ -29,3 +29,13 @@ const ResultPage = () => {
     fetchCheckoutSession()
   }, [session_id])
 
+  if (loading) {
+    return (
+      <Container maxWidth="sm" sx={{textAlign: 'center', mt: 4}}>
+        <CircularProgress />
+        <Typography variant="h6" sx={{mt: 2}}>
+          Loading...
+        </Typography>
+      </Container>
+    )
+  }
