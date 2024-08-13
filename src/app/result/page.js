@@ -9,3 +9,23 @@ const ResultPage = () => {
     // ... (rest of the component)
   }
 
+  useEffect(() => {
+    const fetchCheckoutSession = async () => {
+      if (!session_id) return
+      try {
+        const res = await fetch(`/api/checkout_sessions?session_id=${session_id}`)
+        const sessionData = await res.json()
+        if (res.ok) {
+          setSession(sessionData)
+        } else {
+          setError(sessionData.error)
+        }
+      } catch (err) {
+        setError('An error occurred while retrieving the session.')
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchCheckoutSession()
+  }, [session_id])
+
