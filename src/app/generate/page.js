@@ -7,7 +7,19 @@ import {
   Button,
   Typography,
   Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Grid,
+  Card,
+  CardContent
 } from '@mui/material'
+
+// Import Firestore functions if needed
+import { doc, collection, getDoc, writeBatch } from 'firebase/firestore'
+import { db } from '../firebase' // Adjust the import path according to your project structure
 
 export default function Generate() {
   const [setName, setSetName] = useState('')
@@ -48,7 +60,7 @@ export default function Generate() {
     }
   
     try {
-      const userDocRef = doc(collection(db, 'users'), user.id)
+      const userDocRef = doc(collection(db, 'users'), user.id) // Adjust based on your auth setup
       const userDocSnap = await getDoc(userDocRef)
   
       const batch = writeBatch(db)
@@ -74,38 +86,6 @@ export default function Generate() {
       alert('An error occurred while saving flashcards. Please try again.')
     }
   }
-
-{flashcards.length > 0 && (
-  <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
-    <Button variant="contained" color="primary" onClick={handleOpenDialog}>
-      Save Flashcards
-    </Button>
-  </Box>
-)}
-
-<Dialog open={dialogOpen} onClose={handleCloseDialog}>
-  <DialogTitle>Save Flashcard Set</DialogTitle>
-  <DialogContent>
-    <DialogContentText>
-      Please enter a name for your flashcard set.
-    </DialogContentText>
-    <TextField
-      autoFocus
-      margin="dense"
-      label="Set Name"
-      type="text"
-      fullWidth
-      value={setName}
-      onChange={(e) => setSetName(e.target.value)}
-    />
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={handleCloseDialog}>Cancel</Button>
-    <Button onClick={saveFlashcards} color="primary">
-      Save
-    </Button>
-  </DialogActions>
-</Dialog>
 
   return (
     <Container maxWidth="md">
@@ -134,24 +114,56 @@ export default function Generate() {
       </Box>
       
       {flashcards.length > 0 && (
+        <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+          <Button variant="contained" color="primary" onClick={handleOpenDialog}>
+            Save Flashcards
+          </Button>
+        </Box>
+      )}
+
+      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Save Flashcard Set</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please enter a name for your flashcard set.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Set Name"
+            type="text"
+            fullWidth
+            value={setName}
+            onChange={(e) => setSetName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={saveFlashcards} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {flashcards.length > 0 && (
         <Box sx={{ mt: 4 }}>
-            <Typography variant="h5" component="h2" gutterBottom>
+          <Typography variant="h5" component="h2" gutterBottom>
             Generated Flashcards
-            </Typography>
-            <Grid container spacing={2}>
+          </Typography>
+          <Grid container spacing={2}>
             {flashcards.map((flashcard, index) => (
-                <Grid item xs={12} sm={6} md={4} key={index}>
+              <Grid item xs={12} sm={6} md={4} key={index}>
                 <Card>
-                    <CardContent>
+                  <CardContent>
                     <Typography variant="h6">Front:</Typography>
                     <Typography>{flashcard.front}</Typography>
                     <Typography variant="h6" sx={{ mt: 2 }}>Back:</Typography>
                     <Typography>{flashcard.back}</Typography>
-                    </CardContent>
+                  </CardContent>
                 </Card>
-                </Grid>
+              </Grid>
             ))}
-            </Grid>
+          </Grid>
         </Box>
       )}
     </Container>
