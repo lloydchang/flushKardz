@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Container,
   TextField,
@@ -16,18 +16,29 @@ import {
   Card,
   CardContent
 } from '@mui/material'
-
-// Import Firestore functions if needed
 import { doc, collection, getDoc, writeBatch } from 'firebase/firestore'
-import { db } from '../firebase' // Adjust the import path according to your project structure
+import { getAuth } from 'firebase/auth'
+import { db } from '../../firebase' // Adjust the import path according to your project structure
 
 export default function Generate() {
   const [setName, setSetName] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
   const [text, setText] = useState('')
   const [flashcards, setFlashcards] = useState([])
+  const [user, setUser] = useState(null)
+
   const handleOpenDialog = () => setDialogOpen(true)
   const handleCloseDialog = () => setDialogOpen(false)
+
+  useEffect(() => {
+    // Fetch the current authenticated user
+    const auth = getAuth()
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      setUser(authUser)
+    })
+
+    return () => unsubscribe() // Clean up the subscription on component unmount
+  }, [])
 
   const handleSubmit = async () => {
     if (!text.trim()) {
@@ -59,8 +70,13 @@ export default function Generate() {
       return
     }
   
+    if (!user) {
+      alert('User is not authenticated.')
+      return
+    }
+  
     try {
-      const userDocRef = doc(collection(db, 'users'), user.id) // Adjust based on your auth setup
+      const userDocRef = doc(collection(db, 'users'), user.uid)
       const userDocSnap = await getDoc(userDocRef)
   
       const batch = writeBatch(db)
