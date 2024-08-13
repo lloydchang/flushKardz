@@ -17,21 +17,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
-  );
-}
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return (
     <ClerkProvider>
       <html lang="en">
-        <body>
+        <body className={inter.className}>
           <SignedOut>
             <SignInButton />
           </SignedOut>
@@ -42,5 +30,5 @@ export default function RootLayout({
         </body>
       </html>
     </ClerkProvider>
-  )
+  );
 }
