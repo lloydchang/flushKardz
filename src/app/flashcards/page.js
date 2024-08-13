@@ -41,3 +41,7 @@ export default function Flashcard() {
       </Grid>
     </Container>
   )
+
+  const handleCardClick = (id) => {
+    router.push(`/flashcard?id=${id}`)
+  }
