@@ -1,80 +1,150 @@
 'use client';
 
-import React from 'react'
-import { Container, Box, Typography, AppBar, Toolbar, Button, Grid } from '@mui/material'
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
-import Link from 'next/link'
-import '../styles/globals.css'
-import getStripe from '../utils/get-stripe'
+import React from 'react';
+import { Container, Box, Typography, AppBar, Toolbar, Button } from '@mui/material';
+import { SignedIn, UserButton } from '@clerk/nextjs';
+import '../styles/globals.css';
+import getStripe from '../utils/get-stripe';
+import Link from 'next/link';
 
 export default function Home() {
   const handleSubmit = async () => {
     const checkoutSession = await fetch('/api/checkout_sessions', {
       method: 'POST',
       headers: { origin: 'http://localhost:3000' },
-    })
-    const checkoutSessionJson = await checkoutSession.json()
+    });
+    const checkoutSessionJson = await checkoutSession.json();
 
-    const stripe = await getStripe()
+    const stripe = await getStripe();
     const { error } = await stripe.redirectToCheckout({
       sessionId: checkoutSessionJson.id,
-    })
+    });
 
     if (error) {
-      console.warn(error.message)
+      console.warn(error.message);
     }
-  }
+  };
+
+  const buttonStyle = {
+    background: 'linear-gradient(45deg, #00c6ff, #0072ff)',
+    borderRadius: 50, 
+    px: 4, 
+    py: 2, 
+    fontSize: '1.5rem', 
+    color: 'white',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+    textTransform: 'uppercase',
+    letterSpacing: 1.2,
+    transition: '0.3s',
+    '&:hover': {
+      background: 'linear-gradient(45deg, #0072ff, #00c6ff)',
+      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
+    },
+  };
 
   return (
     <>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography 
-            variant="h6" 
-            sx={{ flexGrow: 1, color: 'primary.main', fontWeight: 'bold' }}
+      <AppBar 
+        position="absolute" 
+        sx={{ 
+          backgroundColor: 'transparent', 
+          boxShadow: 'none', 
+          backdropFilter: 'none', 
+          zIndex: 1201, 
+          width: '100%',
+        }}
+      >
+        <Toolbar sx={{ width: '100%', justifyContent: 'center', position: 'relative' }}>
+          <Button
+            onClick={handleSubmit}
+            sx={{ 
+              ...buttonStyle,
+              position: 'absolute',
+              top: 16,
+              left: '25%',
+              transform: 'translateX(-50%)',
+              zIndex: 1200,
+            }}
           >
-            flushKardz
-          </Typography>
-          <SignedOut>
-            <Button color="inherit" href="/sign-in">Login</Button>
-            <Button color="inherit" href="/sign-up">Sign Up</Button>
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
+            Buy-In
+          </Button>
+          <Button
+            component={Link}
+            href="/hit_me_with_flushKardz"
+            sx={{ 
+              ...buttonStyle,
+              position: 'absolute',
+              top: 16,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 1200,
+            }}
+          >
+            All-In
+          </Button>
+          <Button
+            component={Link}
+            href="/sign-in"
+            sx={{ 
+              ...buttonStyle,
+              position: 'absolute',
+              top: 16,
+              right: '25%',
+              transform: 'translateX(50%)',
+              zIndex: 1200,
+            }}
+          >
+            Sign-In
+          </Button>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </Box>
         </Toolbar>
       </AppBar>
 
-      <Container 
-        maxWidth="md"
+      <Box
         sx={{
-          backgroundImage: 'url(flushKardz.jpg)', // Ensure the path is correct
+          width: '100vw',
+          height: '100vh',
+          backgroundImage: 'url(flushKardz.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          minHeight: '100vh',
-          p: 4,
-          border: '1px solid red', // Debugging border to ensure container is visible
+          backgroundAttachment: 'fixed',
+          backgroundRepeat: 'no-repeat',
+          position: 'relative',
         }}
       >
-        <Box sx={{ textAlign: 'center', my: 4 }}>
-          <Typography variant="h1" component="h1" gutterBottom>
-            <span className="flash">flushKardz</span>
-          </Typography>
-          <Button variant="contained" color="primary" sx={{ mt: 2, mr: 2 }} href="/hit_me_with_flushKardz">
-            Go
-          </Button>
-        </Box>
-
-        <Box sx={{ my: 6, textAlign: 'center' }}>
-          <Grid container spacing={4} justifyContent="center">
-            <Grid item>
-              <Button variant="contained" color="primary" onClick={handleSubmit}>
-                Buy-In
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </Container>
+        <Container 
+          maxWidth="md"
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            p: 4,
+            position: 'relative',
+          }}
+        >
+          <Box 
+            sx={{
+              textAlign: 'center',
+              width: '100%',
+              maxWidth: '500px',
+              backgroundColor: 'rgba(0, 0, 0, 0.4)',
+              borderRadius: 2,
+              p: 4,
+              position: 'relative',
+              marginTop: '15%',
+            }}
+          >
+            <Typography variant="h1" component="h1" gutterBottom sx={{ color: 'white' }}>
+              <span className="flash">flushKardz</span>
+            </Typography>
+          </Box>
+        </Container>
+      </Box>
     </>
-  )
+  );
 }
