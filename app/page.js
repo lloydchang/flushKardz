@@ -1,7 +1,10 @@
+'use client';
+
 import React from 'react'
 import { Container, Box, Typography, AppBar, Toolbar, Button, Grid } from '@mui/material'
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
+import '../styles/globals.css'
 import getStripe from '../utils/get-stripe'
 
 export default function Home() {
@@ -13,7 +16,7 @@ export default function Home() {
     const checkoutSessionJson = await checkoutSession.json()
 
     const stripe = await getStripe()
-    const {error} = await stripe.redirectToCheckout({
+    const { error } = await stripe.redirectToCheckout({
       sessionId: checkoutSessionJson.id,
     })
 
@@ -26,8 +29,11 @@ export default function Home() {
     <>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" style={{flexGrow: 1}}>
-            Flashcard SaaS
+          <Typography 
+            variant="h6" 
+            sx={{ flexGrow: 1, color: 'primary.main', fontWeight: 'bold' }}
+          >
+            flushKardz
           </Typography>
           <SignedOut>
             <Button color="inherit" href="/sign-in">Login</Button>
@@ -39,37 +45,31 @@ export default function Home() {
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="md">
-        <Box sx={{textAlign: 'center', my: 4}}>
-          <Typography variant="h2" component="h1" gutterBottom>
-            Welcome to Flashcard SaaS
+      <Container 
+        maxWidth="md"
+        sx={{
+          backgroundImage: 'url(flushKardz.jpg)', // Ensure the path is correct
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          minHeight: '100vh',
+          p: 4,
+          border: '1px solid red', // Debugging border to ensure container is visible
+        }}
+      >
+        <Box sx={{ textAlign: 'center', my: 4 }}>
+          <Typography variant="h1" component="h1" gutterBottom>
+            <span className="flash">flushKardz</span>
           </Typography>
-          <Typography variant="h5" component="h2" gutterBottom>
-            The easiest way to create flashcards from your text.
-          </Typography>
-          <Button variant="contained" color="primary" sx={{mt: 2, mr: 2}} href="/generate">
-            Get Started
-          </Button>
-          <Button variant="outlined" color="primary" sx={{mt: 2}}>
-            Learn More
+          <Button variant="contained" color="primary" sx={{ mt: 2, mr: 2 }} href="/hit_me_with_flushKardz">
+            Go
           </Button>
         </Box>
 
-        <Box sx={{my: 6}}>
-          <Typography variant="h4" component="h2" gutterBottom>Features</Typography>
-          <Grid container spacing={4}>
-            {/* Add feature items here */}
-          </Grid>
-        </Box>
-
-        <Box sx={{my: 6, textAlign: 'center'}}>
-          <Typography variant="h4" component="h2" gutterBottom>Pricing</Typography>
+        <Box sx={{ my: 6, textAlign: 'center' }}>
           <Grid container spacing={4} justifyContent="center">
             <Grid item>
-              <Typography variant="h5">Pro Plan</Typography>
-              <Typography variant="h4">$10/month</Typography>
               <Button variant="contained" color="primary" onClick={handleSubmit}>
-                Subscribe
+                Buy-In
               </Button>
             </Grid>
           </Grid>

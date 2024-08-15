@@ -2,11 +2,11 @@ import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
 const systemPrompt = `
-You are a flashcard creator, you take in text and create multiple flashcards from it. Make sure to create exactly 10 flashcards.
+You are a flushKard creator, you take in text and create multiple flushKardz from it. Make sure to create exactly 10 flushKardz.
 Both front and back should be one sentence long.
 You should return in the following JSON format:
 {
-  "flashcards":[
+  "flushKardz":[
     {
       "front": "Front of the card",
       "back": "Back of the card"
@@ -28,7 +28,7 @@ export async function POST(req) {
     response_format: { type: 'json_object' },
   })
 
-  const flashcards = JSON.parse(completion.choices[0].message.content)
+  const flushKardz = JSON.parse(completion.choices[0].message.content)
 
-  return NextResponse.json(flashcards.flashcards)
+  return NextResponse.json(flushKardz.flushKardz)
 }

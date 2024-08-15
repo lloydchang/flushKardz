@@ -1,13 +1,16 @@
+// app/result/page.js
+'use client'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Container, Typography, Box, CircularProgress } from '@mui/material'
+
 const ResultPage = () => {
-    const router = useRouter()
-    const searchParams = useSearchParams()
-    const session_id = searchParams.get('session_id')
-    const [loading, setLoading] = useState(true)
-    const [session, setSession] = useState(null)
-    const [error, setError] = useState(null)
-  
-    // ... (rest of the component)
-  }
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const session_id = searchParams.get('session_id')
+  const [loading, setLoading] = useState(true)
+  const [session, setSession] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     const fetchCheckoutSession = async () => {
@@ -31,9 +34,9 @@ const ResultPage = () => {
 
   if (loading) {
     return (
-      <Container maxWidth="sm" sx={{textAlign: 'center', mt: 4}}>
+      <Container maxWidth="sm" sx={{ textAlign: 'center', mt: 4 }}>
         <CircularProgress />
-        <Typography variant="h6" sx={{mt: 2}}>
+        <Typography variant="h6" sx={{ mt: 2 }}>
           Loading...
         </Typography>
       </Container>
@@ -42,7 +45,7 @@ const ResultPage = () => {
 
   if (error) {
     return (
-      <Container maxWidth="sm" sx={{textAlign: 'center', mt: 4}}>
+      <Container maxWidth="sm" sx={{ textAlign: 'center', mt: 4 }}>
         <Typography variant="h6" color="error">
           {error}
         </Typography>
@@ -51,11 +54,11 @@ const ResultPage = () => {
   }
 
   return (
-    <Container maxWidth="sm" sx={{textAlign: 'center', mt: 4}}>
+    <Container maxWidth="sm" sx={{ textAlign: 'center', mt: 4 }}>
       {session.payment_status === 'paid' ? (
         <>
           <Typography variant="h4">Thank you for your purchase!</Typography>
-          <Box sx={{mt: 2}}>
+          <Box sx={{ mt: 2 }}>
             <Typography variant="h6">Session ID: {session_id}</Typography>
             <Typography variant="body1">
               We have received your payment. You will receive an email with the
@@ -66,7 +69,7 @@ const ResultPage = () => {
       ) : (
         <>
           <Typography variant="h4">Payment failed</Typography>
-          <Box sx={{mt: 2}}>
+          <Box sx={{ mt: 2 }}>
             <Typography variant="body1">
               Your payment was not successful. Please try again.
             </Typography>
@@ -75,3 +78,6 @@ const ResultPage = () => {
       )}
     </Container>
   )
+}
+
+export default ResultPage

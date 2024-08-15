@@ -8,9 +8,9 @@ import { getFirestore } from "firebase/firestore";  // Make sure to add this imp
 
 const firebaseConfig = {
   apiKey: "AIzaSyBmnAY2R6Phi_QTd9Q5kh90NxaXx5gkyC0",
-  authDomain: "flashcard-saas-ecd70.firebaseapp.com",
-  projectId: "flashcard-saas-ecd70",
-  storageBucket: "flashcard-saas-ecd70.appspot.com",
+  authDomain: "flushKard-saas-ecd70.firebaseapp.com",
+  projectId: "flushKard-saas-ecd70",
+  storageBucket: "flushKard-saas-ecd70.appspot.com",
   messagingSenderId: "31191270260",
   appId: "1:31191270260:web:4041381f3730674a7b6221",
   measurementId: "G-N45JPV3Y7C"
