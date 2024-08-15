@@ -66,7 +66,7 @@ export default function Home() {
               zIndex: 1200,
             }}
           >
-            Buy-In
+            Buy-In Stripe
           </Button>
           <Button
             component={Link}
@@ -94,7 +94,7 @@ export default function Home() {
               zIndex: 1200,
             }}
           >
-            Sign-In
+            Sign-In Twitch
           </Button>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <SignedIn>
