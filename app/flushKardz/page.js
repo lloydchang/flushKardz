@@ -7,7 +7,7 @@ import { Container, Grid, Card, CardContent, CardActionArea, Typography, Circula
 import { doc, collection, getDoc, setDoc } from 'firebase/firestore'
 import db from '../../firebase'
 
-export default function flushKard() {
+export default function FlushKard() {
   const { isLoaded, isSignedIn, user } = useUser()
   const [flushKardz, setflushKardz] = useState([])
   const [loading, setLoading] = useState(true)

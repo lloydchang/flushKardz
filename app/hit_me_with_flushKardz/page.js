@@ -20,7 +20,7 @@ import { useUser } from '@clerk/nextjs'
 import { doc, collection, getDoc, writeBatch } from 'firebase/firestore'
 import db from '../../firebase'
 
-export default function hit_me_with_flushKardz() {
+export default function HitMeWithFlushKardz() {
   const { isLoaded, isSignedIn, user } = useUser()
   const [text, setText] = useState('')
   const [flushKardz, setFlushKardz] = useState([])
