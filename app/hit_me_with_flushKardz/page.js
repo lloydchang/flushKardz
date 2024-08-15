@@ -1,3 +1,5 @@
+// flushKardz/app/flushKardz/page.js
+
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -10,11 +12,6 @@ import {
   Grid,
   Card,
   CardContent,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
   AppBar,
   Toolbar,
 } from '@mui/material'
@@ -39,7 +36,22 @@ const shuffleDeck = (deck) => {
   return shuffledDeck;
 };
 
-const dealHand = (deck, numCards) => deck.splice(0, numCards)
+// Function to create a flush hand
+const dealFlush = (deck, numCards) => {
+  // Get all cards from the same suit
+  const suits = ['♠', '♦', '♣', '♥']
+  const selectedSuit = suits[Math.floor(Math.random() * suits.length)];
+  const flushCards = deck.filter(card => card.suit === selectedSuit);
+
+  // Ensure we have enough cards to deal
+  if (flushCards.length < numCards) {
+    throw new Error('Not enough cards to deal a flush');
+  }
+
+  // Shuffle and deal the required number of cards
+  const shuffledFlushCards = shuffleDeck(flushCards);
+  return shuffledFlushCards.slice(0, numCards);
+}
 
 const getCardColor = (suit) => {
   return ['♠', '♣'].includes(suit) ? 'black' : 'red'
@@ -48,36 +60,48 @@ const getCardColor = (suit) => {
 export default function HitMeWithFlushKardz() {
   const { isLoaded, isSignedIn, user } = useUser()
   const [text, setText] = useState('')
-  const [houseHand, setHouseHand] = useState([])
-  const [userHand, setUserHand] = useState([])
   const [flushKardz, setFlushKardz] = useState([])
-  const [setName, setSetName] = useState('')
-  const [dialogOpen, setDialogOpen] = useState(false)
+  const [handName, sethandName] = useState('')
+  const [userHand, setUserHand] = useState([])
+  const [houseHand, setHouseHand] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    const deck = shuffleDeck(createDeck())
-    setHouseHand(dealHand(deck, 5))
-    setUserHand(dealHand(deck, 5))
-  }, [])
+    const deck = shuffleDeck(createDeck());
+    
+    // Deal user hand
+    const userFlush = dealFlush(deck, 5);
+    
+    // Remove user hand cards from the deck
+    let remainingDeck = deck.filter(card => !userFlush.some(userCard => card.rank === userCard.rank && card.suit === userCard.suit));
+    
+    // Deal house hand
+    const houseFlush = dealFlush(remainingDeck, 5);
+  
+    setUserHand(userFlush);
+    setHouseHand(houseFlush);
+  }, []);  
 
   const handleSubmit = async () => {
-    if (!text.trim()) {
-      alert('Please enter some text.')
-      return
-    }
-
     setIsLoading(true)
     try {
       const response = await fetch('/api/hit_me_with_flushKardz', {
         method: 'POST',
         body: text,
       })
-
+  
       if (!response.ok) throw new Error('Failed to hit me with flushKardz')
-
+  
       const data = await response.json()
-      setFlushKardz(data)
+  
+      // Add front, back, and flipped properties to each card
+      const updatedData = data.map(card => ({
+        front: `${card.rank} ${card.suit}`,
+        back: 'BACK SIDE TEXT', // Adjust this based on your requirements
+        flipped: false
+      }))
+  
+      setFlushKardz(updatedData)
     } catch (error) {
       console.error('Error generating flushKardz:', error)
       alert('An error occurred. Please try again.')
@@ -86,45 +110,18 @@ export default function HitMeWithFlushKardz() {
     }
   }
 
-  const handleOpenDialog = () => setDialogOpen(true)
-  const handleCloseDialog = () => setDialogOpen(false)
-
-  const saveFlushKardz = async () => {
-    if (!setName.trim()) {
-      alert('Please enter a name for your flushKard set.')
-      return
-    }
-
-    try {
-      const userDocRef = doc(collection(db, 'users'), user.id)
-      const userDocSnap = await getDoc(userDocRef)
-
-      const batch = writeBatch(db)
-      const updatedSets = [...(userDocSnap.data()?.flushKardSets || []), { name: setName }]
-      
-      userDocSnap.exists()
-        ? batch.update(userDocRef, { flushKardSets: updatedSets })
-        : batch.set(userDocRef, { flushKardSets: [{ name: setName }] })
-
-      const setDocRef = doc(collection(userDocRef, 'flushKardSets'), setName)
-      batch.set(setDocRef, { flushKardz })
-
-      await batch.commit()
-
-      alert('flushKardz saved successfully!')
-      handleCloseDialog()
-      setSetName('')
-    } catch (error) {
-      console.error('Error saving flushKardz:', error)
-      alert('An error occurred while saving flushKardz. Please try again.')
-    }
-  }
-
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault()
       handleSubmit()
     }
+  }
+
+  // Function to handle card flip
+  const handleCardFlip = (index) => {
+    const updatedFlushKardz = [...flushKardz]
+    updatedFlushKardz[index].flipped = !updatedFlushKardz[index].flipped
+    setFlushKardz(updatedFlushKardz)
   }
 
   const renderHand = (hand) => (
@@ -182,7 +179,7 @@ export default function HitMeWithFlushKardz() {
               zIndex: 1200,
             }}
           >
-            Buy-In
+            Stripe
           </Button>
           <Button
             component={Link}
@@ -237,7 +234,7 @@ export default function HitMeWithFlushKardz() {
               zIndex: 1200,
             }}
           >
-            Sign-In
+            Twitch
           </Button>
         </Toolbar>
       </AppBar>
@@ -261,7 +258,7 @@ export default function HitMeWithFlushKardz() {
       >
         <Container maxWidth="sm" sx={{ overflow: 'auto', height: '100%', p: 2, '&::-webkit-scrollbar': { display: 'none' } }}>
           <Box sx={{ my: 2, mt: 10 }}>
-            <Typography variant="h3" component="h1" gutterBottom sx={{ color: 'white', fontWeight: 'bold' }}>
+            <Typography variant="h3" component="h1" gutterBottom sx={{ color: 'white', fontWeight: 'bold', fontSize: '3rem' }}>
               hit me with flushKardz
             </Typography>
             <TextField
@@ -269,9 +266,8 @@ export default function HitMeWithFlushKardz() {
               onChange={(e) => setText(e.target.value)}
               onKeyDown={handleKeyDown}
               fullWidth
-              label="Type your query here"
               variant="outlined"
-              sx={{ backgroundColor: 'rgba(255, 255, 255, 0.8)', mb: 2 }}
+              sx={{ backgroundColor: 'rgba(255, 255, 255, 0.8)', mb: 13 }}
             />
           </Box>
 
@@ -298,22 +294,30 @@ export default function HitMeWithFlushKardz() {
                 },
               }}
             >
-              {isLoading ? 'Loading...' : 'Submit'}
+              {isLoading ? 'Shuffling...' : 'Play'}
             </Button>
           </Box>
 
           <Box sx={{ my: 2 }}>
-            <Typography variant="h6" component="h2" gutterBottom sx={{ color: 'white' }}>
-              Your Flush Kardz:
-            </Typography>
             <Grid container spacing={2}>
               {flushKardz.map((card, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Card sx={{ backgroundColor: 'rgba(255, 255, 255, 0.3)', border: '2px solid black', borderRadius: '8px' }}>
-                    <CardContent sx={{ color: 'black' }}>
+                  <Card 
+                    sx={{ 
+                      backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+                      border: '2px solid black', 
+                      borderRadius: '8px',
+                      position: 'relative',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => handleCardFlip(index)}
+                  >
+                    <CardContent sx={{ color: 'black', display: card.flipped ? 'none' : 'block' }}>
                       <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
                         {card.front}
                       </Typography>
+                    </CardContent>
+                    <CardContent sx={{ color: 'black', display: card.flipped ? 'block' : 'none', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(255, 255, 255, 0.3)', border: '2px solid black', borderRadius: '8px' }}>
                       <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
                         {card.back}
                       </Typography>
@@ -321,39 +325,6 @@ export default function HitMeWithFlushKardz() {
                   </Card>
                 </Grid>
               ))}
-            </Grid>
-          </Box>
-
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleOpenDialog}
-            sx={{ 
-              fontSize: '1.5rem', 
-              px: 4, 
-              py: 2, 
-              borderRadius: 50, 
-              background: 'linear-gradient(45deg, #00c6ff, #0072ff)',
-              color: 'white',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-              textTransform: 'uppercase',
-              letterSpacing: 1.2,
-              transition: '0.3s',
-              '&:hover': {
-                background: 'linear-gradient(45deg, #0072ff, #00c6ff)',
-                boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
-              },
-            }}
-          >
-            Save
-          </Button>
-
-          <Box sx={{ mt: 4 }}>
-            <Typography variant="h4" component="h2" sx={{ color: 'white', fontWeight: 'bold' }}>
-              House
-            </Typography>
-            <Grid container spacing={2} direction="row">
-              {renderHand(houseHand)}
             </Grid>
           </Box>
 
@@ -366,27 +337,15 @@ export default function HitMeWithFlushKardz() {
             </Grid>
           </Box>
 
-          <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-            <DialogTitle>Save Flush Kardz Set</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Enter a name for your flushKard set:
-              </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                label="Set Name"
-                fullWidth
-                variant="outlined"
-                value={setName}
-                onChange={(e) => setSetName(e.target.value)}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseDialog}>Cancel</Button>
-              <Button onClick={saveFlushKardz}>Save</Button>
-            </DialogActions>
-          </Dialog>
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="h4" component="h2" sx={{ color: 'white', fontWeight: 'bold' }}>
+              House
+            </Typography>
+            <Grid container spacing={2} direction="row">
+              {renderHand(houseHand)}
+            </Grid>
+          </Box>
+
         </Container>
       </Box>
     </>
