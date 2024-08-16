@@ -23,62 +23,53 @@ export default function Home() {
   const router = useRouter();
   const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
 
-  // Capture redirectTo parameter from URL query
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const redirectTo = queryParams.get('redirectTo') || '/';
     
-    // Redirect to the specified URL if it's not the current page
     if (redirectTo && redirectTo !== '/') {
       router.push(redirectTo);
     }
   }, [router]);
 
-  // Handle orientation changes
   useEffect(() => {
     const handleOrientationChange = () => {
       setIsLandscape(window.innerWidth > window.innerHeight);
     };
 
-    // Add event listener for orientation changes
     window.addEventListener('resize', handleOrientationChange);
-    handleOrientationChange(); // Check initial orientation
+    handleOrientationChange();
 
-    // Cleanup the event listener on component unmount
     return () => window.removeEventListener('resize', handleOrientationChange);
   }, []);
 
-  // Handle the Stripe checkout process
   const handleSubmit = async () => {
     try {
-      // Call the API to create a checkout session
       const response = await fetch('api/buy', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }, // Set correct Content-Type
+        headers: { 'Content-Type': 'application/json' },
       });
       const checkoutSessionJson = await response.json();
 
-      // Get Stripe instance and redirect to checkout
       const stripe = await getStripe();
       const { error } = await stripe.redirectToCheckout({
         sessionId: checkoutSessionJson.id,
       });
 
       if (error) {
-        console.warn(error.message); // Log any errors
+        console.warn(error.message);
       }
     } catch (error) {
       console.error('Error during checkout process:', error);
     }
   };
 
-  // Define styles for buttons
   const buttonStyle = {
     background: 'linear-gradient(45deg, #00c6ff, #0072ff)',
-    borderRadius: 50, 
-    px: 4, 
-    py: 2, 
-    fontSize: '1.5rem', 
+    borderRadius: 50,
+    px: 4,
+    py: 2,
+    fontSize: '1.5rem',
     color: 'white',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
     textTransform: 'uppercase',
@@ -106,9 +97,11 @@ export default function Home() {
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 1300,
+            textAlign: 'center',
+            padding: '1rem',
           }}
         >
-          <Typography variant="h4">
+          <Typography variant="h6">
             Please rotate your device to landscape mode for the best experience.
           </Typography>
         </Box>
@@ -129,6 +122,9 @@ export default function Home() {
             onClick={handleSubmit}
             sx={{ 
               ...buttonStyle,
+              fontSize: '1rem', 
+              px: 2, 
+              py: 1,
               position: 'absolute',
               top: 16,
               left: '25%',
@@ -143,6 +139,9 @@ export default function Home() {
             href="/play"
             sx={{ 
               ...buttonStyle,
+              fontSize: '1rem', 
+              px: 2, 
+              py: 1,
               position: 'absolute',
               top: 16,
               left: '50%',
@@ -154,23 +153,13 @@ export default function Home() {
           </Button>
           <Button
             component={Link}
-            href={isSignedIn ? "/sign-out" : "/sign-in"} // Conditional link based on user status
+            href={isSignedIn ? "/sign-out" : "/sign-in"}
             color="inherit"
             sx={{ 
-              background: 'linear-gradient(45deg, #00c6ff, #0072ff)',
-              borderRadius: 50, 
-              px: 4, 
-              py: 2, 
-              fontSize: '1.5rem', 
-              color: 'white',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-              textTransform: 'uppercase',
-              letterSpacing: 1.2,
-              transition: '0.3s',
-              '&:hover': {
-                background: 'linear-gradient(45deg, #0072ff, #00c6ff)',
-                boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
-              },
+              ...buttonStyle,
+              fontSize: '1rem', 
+              px: 2, 
+              py: 1,
               position: 'absolute',
               top: 16,
               right: '25%',
@@ -202,7 +191,7 @@ export default function Home() {
             alignItems: 'center',
             justifyContent: 'center',
             minHeight: '100vh',
-            p: 4,
+            p: 2,
             position: 'relative',
           }}
         >
@@ -210,16 +199,16 @@ export default function Home() {
             sx={{
               textAlign: 'center',
               width: '100%',
-              maxWidth: '500px',
+              maxWidth: '90%',
               backgroundColor: 'rgba(0, 0, 0, 0.4)',
               borderRadius: 2,
-              p: 4,
+              p: 2,
               position: 'relative',
               marginTop: '15%',
             }}
           >
             <Typography 
-              variant="h1" 
+              variant="h3" 
               component="h1" 
               gutterBottom 
               sx={{ color: 'white', animation: 'flash 2s infinite' }}
@@ -242,14 +231,14 @@ export default function Home() {
           fontSize: '0.75rem',
         }}
       >
-      <Link
-        href="https://github.com/lloydchang/flushKardz/blob/main/public/flushKardz.vercel.app%20%C2%A9%202024%20Lloyd%20Chang.pdf"
-        target="_blank" // Opens the link in a new tab
-        rel="noopener noreferrer" // Adds security by preventing the new page from accessing the window object
-        underline="none" // Removes the underline from the link (optional)
-      >
-        <Typography>© 2024 Lloyd Chang</Typography>
-      </Link>
+        <Link
+          href="https://github.com/lloydchang/flushKardz/blob/main/public/flushKardz.vercel.app%20%C2%A9%202024%20Lloyd%20Chang.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          underline="none"
+        >
+          <Typography>© 2024 Lloyd Chang</Typography>
+        </Link>
       </Box>
     </>
   );
