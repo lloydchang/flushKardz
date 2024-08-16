@@ -1,5 +1,5 @@
 // app/layout.js
-import { ClerkProvider } from '@clerk/nextjs';
+import { ClerkProvider, RedirectToSignIn } from '@clerk/nextjs';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import PostHogInitializer from './PostHogInitializer'; // Import the client component

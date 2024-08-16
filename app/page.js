@@ -2,14 +2,30 @@
 
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Box, Typography, AppBar, Toolbar, Button } from '@mui/material';
-import { SignedIn, UserButton } from '@clerk/nextjs';
+import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import '../styles/globals.css';
 import getStripe from '../utils/get-stripe';
 import Link from 'next/link';
+import { useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const { isLoaded, isSignedIn } = useUser();
+  const router = useRouter();
+  
+  // Capture redirectTo parameter
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const redirectTo = queryParams.get('redirectTo') || '/';
+    
+    // Redirect to the specified URL if available and not the current page
+    if (redirectTo && redirectTo !== '/') {
+      router.push(redirectTo);
+    }
+  }, [router]);
+
   const handleSubmit = async () => {
     const checkoutSession = await fetch('/api/checkout_sessions', {
       method: 'POST',
@@ -86,9 +102,23 @@ export default function Home() {
           </Button>
           <Button
             component={Link}
-            href="/sign-in"
+            href={isSignedIn ? "/sign-out" : "/sign-in"} // Link to sign-out or sign-in page based on user status
+            color="inherit"
             sx={{ 
-              ...buttonStyle,
+              background: 'linear-gradient(45deg, #00c6ff, #0072ff)',
+              borderRadius: 50, 
+              px: 4, 
+              py: 2, 
+              fontSize: '1.5rem', 
+              color: 'white',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+              textTransform: 'uppercase',
+              letterSpacing: 1.2,
+              transition: '0.3s',
+              '&:hover': {
+                background: 'linear-gradient(45deg, #0072ff, #00c6ff)',
+                boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
+              },
               position: 'absolute',
               top: 16,
               right: '25%',
@@ -96,13 +126,8 @@ export default function Home() {
               zIndex: 1200,
             }}
           >
-            Sign-In Twitch
+            {isSignedIn ? 'Sign-Out Twitch' : 'Sign-In Twitch'} {/* Display text based on user status */}
           </Button>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </Box>
         </Toolbar>
       </AppBar>
 

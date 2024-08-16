@@ -261,7 +261,7 @@ export default function Play() {
           </Button>
           <Button
             component={Link}
-            href="/sign-in"
+            href={isSignedIn ? "/sign-out" : "/sign-in"} // Link to sign-out or sign-in page based on user status
             color="inherit"
             sx={{ 
               background: 'linear-gradient(45deg, #00c6ff, #0072ff)',
@@ -285,7 +285,7 @@ export default function Play() {
               zIndex: 1200,
             }}
           >
-            Sign-In Twitch
+            {isSignedIn ? 'Sign-Out Twitch' : 'Sign-In Twitch'} {/* Display text based on user status */}
           </Button>
         </Toolbar>
       </AppBar>
