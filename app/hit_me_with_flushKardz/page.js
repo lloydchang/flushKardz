@@ -38,46 +38,42 @@ const shuffleDeck = (deck) => {
 
 // Function to create a flush hand
 const dealFlush = (deck, numCards) => {
-  // Get all cards from the same suit
-  const suits = ['♠', '♦', '♣', '♥']
+  const suits = ['♣', '♦', '♥', '♠']
   const selectedSuit = suits[Math.floor(Math.random() * suits.length)];
   const flushCards = deck.filter(card => card.suit === selectedSuit);
 
-  // Ensure we have enough cards to deal
   if (flushCards.length < numCards) {
     throw new Error('Not enough cards to deal a flush');
   }
 
-  // Shuffle and deal the required number of cards
   const shuffledFlushCards = shuffleDeck(flushCards);
   return shuffledFlushCards.slice(0, numCards);
 }
 
 const getCardColor = (suit) => {
-  return ['♠', '♣'].includes(suit) ? 'black' : 'red'
+  return ['♣', '♠'].includes(suit) ? 'black' : 'red'
 }
 
-// New function to generate unique community cards
-// const generateCommunityCards = (deck, numCards) => {
-//   const communityCards = [];
-//   let remainingDeck = [...deck];
+// New function to compare hands and determine the winner
+const compareHands = (userHand, aiHand) => {
+  const rankOrder = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+  
+  const sortedUserHand = userHand.sort((a, b) => rankOrder.indexOf(b.rank) - rankOrder.indexOf(a.rank));
+  const sortedAIHand = aiHand.sort((a, b) => rankOrder.indexOf(b.rank) - rankOrder.indexOf(a.rank));
 
-//   for (let i = 0; i < numCards; i++) {
-//     if (remainingDeck.length === 0) break;
-//     const randomIndex = Math.floor(Math.random() * remainingDeck.length);
-//     const card = remainingDeck[randomIndex];
-//     communityCards.push({
-//       rank: card.rank,
-//       suit: card.suit,
-//       front: `Community Card ${i + 1}`,
-//       back: 'BACK SIDE TEXT',
-//       flipped: false
-//     });
-//     remainingDeck = remainingDeck.filter((_, index) => index !== randomIndex);
-//   }
-
-//   return communityCards;
-// }
+  for (let i = 0; i < 5; i++) {
+    const userRankIndex = rankOrder.indexOf(sortedUserHand[i].rank);
+    const aiRankIndex = rankOrder.indexOf(sortedAIHand[i].rank);
+    
+    if (userRankIndex > aiRankIndex) {
+      return { winner: "User", message: "You win!" };
+    } else if (aiRankIndex > userRankIndex) {
+      return { winner: "AI", message: "AI wins!" };
+    }
+  }
+  
+  return { winner: "Tie", message: "It's a tie!" };
+}
 
 export default function HitMeWithFlushKardz() {
   const { isLoaded, isSignedIn, user } = useUser()
@@ -87,62 +83,78 @@ export default function HitMeWithFlushKardz() {
   const [userHand, setUserHand] = useState([])
   const [artificialIntelligenceHand, setArtificialIntelligenceHand] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [winner, setWinner] = useState('')
 
   useEffect(() => {
     const deck = shuffleDeck(createDeck());
     
-    // Deal user hand
     const userFlush = dealFlush(deck, 5);
     
-    // Remove user hand cards from the deck
     let remainingDeck = deck.filter(card => !userFlush.some(userCard => card.rank === userCard.rank && card.suit === userCard.suit));
     
-    // Deal artificial intelligence hand
     const artificialIntelligenceFlush = dealFlush(remainingDeck, 5);
   
     setUserHand(userFlush);
     setArtificialIntelligenceHand(artificialIntelligenceFlush);
-  }, []);  
+
+    // Determine the winner
+    const result = compareHands(userFlush, artificialIntelligenceFlush);
+    setWinner(result);
+  }, []);
 
   const handleSubmit = async () => {
     setIsLoading(true)
     try {
+      const deck = shuffleDeck(createDeck());
+  
+      // Deal new flush hands for the user and AI
+      const userFlush = dealFlush(deck, 5);
+  
+      let remainingDeck = deck.filter(card => !userFlush.some(userCard => card.rank === userCard.rank && card.suit === userCard.suit));
+  
+      const artificialIntelligenceFlush = dealFlush(remainingDeck, 5);
+  
+      setUserHand(userFlush);
+      setArtificialIntelligenceHand(artificialIntelligenceFlush);
+  
+      // Determine the winner
+      const result = compareHands(userFlush, artificialIntelligenceFlush);
+      setWinner(result);
+  
       const response = await fetch('/api/hit_me_with_flushKardz', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ text }),
-      })
+      });
   
-      if (!response.ok) throw new Error('Failed to hit me with flushKardz')
+      if (!response.ok) throw new Error('Failed to hit me with flushKardz');
   
-      const data = await response.json()
+      const data = await response.json();
       console.log('Received data:', data);
   
-      // Use the received data for front and back, generate separate rank and suit
-      const usedCards = [...userHand, ...artificialIntelligenceHand];
-      const remainingDeck = createDeck().filter(card => 
+      const usedCards = [...userFlush, ...artificialIntelligenceFlush];
+      const remainingDeckForCommunity = createDeck().filter(card =>
         !usedCards.some(usedCard => usedCard.rank === card.rank && usedCard.suit === card.suit)
       );
-
-//      const communityCards = generateCommunityCards(remainingDeck, data.length);
-      const communityCards = dealFlush(remainingDeck, data.length);
-      
+  
+      const communityCards = dealFlush(remainingDeckForCommunity, data.length);
+  
       const updatedData = data.map((item, index) => ({
         ...communityCards[index],
         front: item.front || `Community Card ${index + 1}`,
         back: item.back || 'BACK SIDE TEXT',
       }));
   
-      setFlushKardz(updatedData)
+      setFlushKardz(updatedData);
     } catch (error) {
-      console.error('Error generating flushKardz:', error)
-      alert('An error occurred. Please try again.')
+      console.error('Error generating flushKardz:', error);
+      alert('An error occurred. Please try again.');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
   
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -151,7 +163,6 @@ export default function HitMeWithFlushKardz() {
     }
   }
 
-  // Function to handle card flip
   const handleCardFlip = (index) => {
     const updatedFlushKardz = [...flushKardz]
     updatedFlushKardz[index].flipped = !updatedFlushKardz[index].flipped
@@ -332,40 +343,6 @@ export default function HitMeWithFlushKardz() {
             </Button>
           </Box>
 
-          {/* <Box sx={{ my: 4 }}>
-            <Typography variant="h4" component="h2" sx={{ color: 'white', fontWeight: 'bold' }}>
-              community's flushKardz (flashcards / flush cards)
-            </Typography>
-            <Grid container spacing={2}>
-              {flushKardz.map((card, index) => (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Card 
-                    sx={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 1)', 
-                      // backgroundColor: card.flipped ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 1)',
-                      border: '2px solid black', 
-                      borderRadius: '8px',
-                      position: 'relative',
-                      cursor: 'pointer'
-                    }}
-                    onClick={() => handleCardFlip(index)}
-                  >
-                    <CardContent sx={{ color: 'black', display: card.flipped ? 'none' : 'block' }}>
-                      <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
-                        {card.front}
-                      </Typography>
-                    </CardContent>
-                    <CardContent sx={{ color: 'black', display: card.flipped ? 'block' : 'none', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(255, 255, 255, 0.3)', border: '2px solid black', borderRadius: '8px' }}>
-                      <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
-                        {card.back}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          </Box> */}
-
           <Box sx={{ my: 4 }}>
             <Typography variant="h5" component="h5" sx={{ color: 'white', fontWeight: 'bold' }}>
               community's flushKardz / flash cards
@@ -380,9 +357,9 @@ export default function HitMeWithFlushKardz() {
                       borderRadius: '8px',
                       position: 'relative',
                       cursor: 'pointer',
-                      overflow: 'hidden', // Ensure no content overflow
-                      height: '200px', // Set a fixed height for consistency
-                      width: '100%', // Ensure the card takes full width of its container
+                      overflow: 'hidden',
+                      height: '200px',
+                      width: '100%',
                     }}
                     onClick={() => handleCardFlip(index)}
                   >
@@ -395,8 +372,8 @@ export default function HitMeWithFlushKardz() {
                         left: 0,
                         width: '100%',
                         height: '100%',
-                        backgroundColor: 'rgba(255, 255, 255, 1)', // Ensure the front side has a solid background
-                        zIndex: 1, // Ensure the front side is on top
+                        backgroundColor: 'rgba(255, 255, 255, 1)',
+                        zIndex: 1,
                       }}
                     >
                       <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
@@ -412,11 +389,11 @@ export default function HitMeWithFlushKardz() {
                         left: 0,
                         width: '100%',
                         height: '100%',
-                        backgroundColor: 'rgba(255, 255, 255, 0.3)', // Semi-transparent background for the back side
+                        backgroundColor: 'rgba(255, 255, 255, 0.3)',
                         border: '2px solid black',
                         borderRadius: '8px',
-                        zIndex: 0, // Ensure the back side is behind the front side
-                        display: 'flex', // Center the text
+                        zIndex: 0,
+                        display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                       }}
@@ -474,6 +451,12 @@ export default function HitMeWithFlushKardz() {
             <Grid container spacing={2} direction="row">
               {renderHand(artificialIntelligenceHand)}
             </Grid>
+          </Box>
+
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="h3" component="h2" sx={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>
+              {winner.message}
+            </Typography>
           </Box>
 
         </Container>
