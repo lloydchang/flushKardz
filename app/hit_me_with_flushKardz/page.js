@@ -77,7 +77,7 @@ const compareHands = (userHand, aiHand) => {
 
 export default function HitMeWithFlushKardz() {
   const { isLoaded, isSignedIn, user } = useUser()
-  const [text, setText] = useState('Type words here to change community\'s flushKardz')
+  const [text, setText] = useState('Type words here to change Community’s flash/flushKardz')
   const [flushKardz, setFlushKardz] = useState([])
   const [handName, sethandName] = useState('')
   const [userHand, setUserHand] = useState([])
@@ -103,24 +103,9 @@ export default function HitMeWithFlushKardz() {
   }, []);
 
   const handleSubmit = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
+    
     try {
-      const deck = shuffleDeck(createDeck());
-  
-      // Deal new flush hands for the user and AI
-      const userFlush = dealFlush(deck, 5);
-  
-      let remainingDeck = deck.filter(card => !userFlush.some(userCard => card.rank === userCard.rank && card.suit === userCard.suit));
-  
-      const artificialIntelligenceFlush = dealFlush(remainingDeck, 5);
-  
-      setUserHand(userFlush);
-      setArtificialIntelligenceHand(artificialIntelligenceFlush);
-  
-      // Determine the winner
-      const result = compareHands(userFlush, artificialIntelligenceFlush);
-      setWinner(result);
-  
       const response = await fetch('/api/hit_me_with_flushKardz', {
         method: 'POST',
         headers: {
@@ -133,6 +118,26 @@ export default function HitMeWithFlushKardz() {
   
       const data = await response.json();
       console.log('Received data:', data);
+
+      // Shuffle the deck
+      const deck = shuffleDeck(createDeck());
+  
+      // Deal new flush hands for the user and AI after shuffling is complete
+      const userFlush = dealFlush(deck, 5);
+  
+      let remainingDeck = deck.filter(card => !userFlush.some(userCard => card.rank === userCard.rank && card.suit === userCard.suit));
+  
+      const artificialIntelligenceFlush = dealFlush(remainingDeck, 5);
+  
+      // // Simulate shuffling delay
+      // setTimeout(() => {
+        setUserHand(userFlush);
+        setArtificialIntelligenceHand(artificialIntelligenceFlush);
+  
+        // Determine the winner
+        const result = compareHands(userFlush, artificialIntelligenceFlush);
+        setWinner(result);
+      // }, 1500); // Adjust the delay time as needed
   
       const usedCards = [...userFlush, ...artificialIntelligenceFlush];
       const remainingDeckForCommunity = createDeck().filter(card =>
@@ -155,7 +160,7 @@ export default function HitMeWithFlushKardz() {
       setIsLoading(false);
     }
   };
-  
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault()
@@ -304,7 +309,7 @@ export default function HitMeWithFlushKardz() {
         <Container maxWidth="sm" sx={{ overflow: 'auto', height: '100%', p: 2, '&::-webkit-scrollbar': { display: 'none' } }}>
           <Box sx={{ my: 2, mt: 10 }}>
             <Typography variant="h3" component="h1" gutterBottom sx={{ color: 'white', fontWeight: 'bold', fontSize: '3rem' }}>
-              hit me with flushKardz
+              Hit me with flushKardz
             </Typography>
             <TextField
               value={text}
@@ -344,8 +349,8 @@ export default function HitMeWithFlushKardz() {
           </Box>
 
           <Box sx={{ my: 4 }}>
-            <Typography variant="h5" component="h5" sx={{ color: 'white', fontWeight: 'bold' }}>
-              community's flushKardz / flash cards
+            <Typography variant="h4" component="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
+              Community’s flash/flushKardz
             </Typography>
             <Grid container spacing={2}>
               {flushKardz.map((card, index) => (
@@ -437,7 +442,7 @@ export default function HitMeWithFlushKardz() {
 
           <Box sx={{ mt: 4 }}>
             <Typography variant="h4" component="h2" sx={{ color: 'white', fontWeight: 'bold' }}>
-              your flush cards
+              Your flush cards
             </Typography>
             <Grid container spacing={2} direction="row">
               {renderHand(userHand)}
@@ -446,7 +451,7 @@ export default function HitMeWithFlushKardz() {
 
           <Box sx={{ mt: 4 }}>
             <Typography variant="h4" component="h2" sx={{ color: 'white', fontWeight: 'bold' }}>
-              AI's flush cards
+              AI’s flush cards
             </Typography>
             <Grid container spacing={2} direction="row">
               {renderHand(artificialIntelligenceHand)}
