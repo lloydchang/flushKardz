@@ -520,7 +520,7 @@ export default function play() {
           1. Yazzyn Yappa <br/>
           2. Sajayya Swifties <br/>
           3. Pharzee Pixela <br/>
-          4. Jaaak O'Brainian <br/>
+          4. Jaaak O’Brainian <br/>
           5. Anjellyca Anucello <br/>
           6. Fayzun Fiersum <br/>
           7. Raaheed Fliashh <br/>
