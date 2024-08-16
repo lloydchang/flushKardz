@@ -68,7 +68,7 @@ export default function Home() {
               zIndex: 1200,
             }}
           >
-            Buy-In
+            Buy-In Stripe
           </Button>
           <Button
             component={Link}
@@ -96,7 +96,7 @@ export default function Home() {
               zIndex: 1200,
             }}
           >
-            Sign-In
+            Sign-In Twitch
           </Button>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <SignedIn>
@@ -129,28 +129,43 @@ export default function Home() {
             position: 'relative',
           }}
         >
-        <Box 
-          sx={{
-            textAlign: 'center',
-            width: '100%',
-            maxWidth: '500px',
-            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-            borderRadius: 2,
-            p: 4,
-            position: 'relative',
-            marginTop: '15%',
-          }}
-        >
-          <Typography 
-            variant="h1" 
-            component="h1" 
-            gutterBottom 
-            sx={{ color: 'white', animation: 'flash 2s infinite' }}  // Apply animation here
+          <Box 
+            sx={{
+              textAlign: 'center',
+              width: '100%',
+              maxWidth: '500px',
+              backgroundColor: 'rgba(0, 0, 0, 0.4)',
+              borderRadius: 2,
+              p: 4,
+              position: 'relative',
+              marginTop: '15%',
+            }}
           >
-            flushKardz
-          </Typography>
-        </Box>
+            <Typography 
+              variant="h1" 
+              component="h1" 
+              gutterBottom 
+              sx={{ color: 'white', animation: 'flash 2s infinite' }}  // Apply animation here
+            >
+              flushKardz
+            </Typography>
+          </Box>
         </Container>
+      </Box>
+
+      <Box 
+        sx={{ 
+          width: '100%', 
+          position: 'absolute', 
+          bottom: 0, 
+          textAlign: 'center', 
+          py: 1, 
+          backgroundColor: 'rgba(0, 0, 0, 0)',
+          color: 'white',
+          fontSize: '0.75rem',
+        }}
+      >
+        <Typography>© 2024 Lloyd Chang</Typography>
       </Box>
     </>
   );

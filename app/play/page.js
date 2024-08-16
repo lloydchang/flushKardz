@@ -19,6 +19,7 @@ import Link from 'next/link'
 import { useUser } from '@clerk/nextjs'
 import { doc, collection, getDoc, writeBatch } from 'firebase/firestore'
 import db from '../../firebase'
+import getStripe from '../../utils/get-stripe.js';
 
 // Helper functions
 const createDeck = () => {
@@ -106,7 +107,7 @@ export default function play() {
     setIsLoading(true);
     
     try {
-      const response = await fetch('/api/hit_me_with_flushKardz', {
+      const response = await fetch('api/ai', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -524,11 +525,25 @@ export default function play() {
           6. Fayzun Fiersum <br/>
           7. Raaheed Fliashh <br/>
           8. Naeaal Paanoola <br/>
-          9. Dyeno Daboot <br/>
+          9. Dyeno Dabot <br/>
           10. Mesix Yujustavansed <br/>
         </Typography>
       </Box>
 
+      <Box 
+        sx={{ 
+          width: '100%', 
+          position: 'absolute', 
+          bottom: 0, 
+          textAlign: 'center', 
+          py: 1, 
+          backgroundColor: 'rgba(0, 0, 0, 0)',
+          color: 'white',
+          fontSize: '0.75rem',
+        }}
+      >
+        <Typography>© 2024 Lloyd Chang</Typography>
+      </Box>
     </>
   )
 }
