@@ -1,3 +1,5 @@
+// flushKardz/page.js
+
 'use client';
 
 import React from 'react';
@@ -66,11 +68,11 @@ export default function Home() {
               zIndex: 1200,
             }}
           >
-            Buy-In Stripe
+            Buy-In
           </Button>
           <Button
             component={Link}
-            href="/hit_me_with_flushKardz"
+            href="/play"
             sx={{ 
               ...buttonStyle,
               position: 'absolute',
@@ -80,7 +82,7 @@ export default function Home() {
               zIndex: 1200,
             }}
           >
-            All-In
+            Play
           </Button>
           <Button
             component={Link}
@@ -94,7 +96,7 @@ export default function Home() {
               zIndex: 1200,
             }}
           >
-            Sign-In Twitch
+            Sign-In
           </Button>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <SignedIn>
@@ -108,7 +110,7 @@ export default function Home() {
         sx={{
           width: '100vw',
           height: '100vh',
-          backgroundImage: 'url(flushKardz.jpg)',
+          backgroundImage: 'url(home.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
@@ -127,22 +129,27 @@ export default function Home() {
             position: 'relative',
           }}
         >
-          <Box 
-            sx={{
-              textAlign: 'center',
-              width: '100%',
-              maxWidth: '500px',
-              backgroundColor: 'rgba(0, 0, 0, 0.4)',
-              borderRadius: 2,
-              p: 4,
-              position: 'relative',
-              marginTop: '15%',
-            }}
+        <Box 
+          sx={{
+            textAlign: 'center',
+            width: '100%',
+            maxWidth: '500px',
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            borderRadius: 2,
+            p: 4,
+            position: 'relative',
+            marginTop: '15%',
+          }}
+        >
+          <Typography 
+            variant="h1" 
+            component="h1" 
+            gutterBottom 
+            sx={{ color: 'white', animation: 'flash 2s infinite' }}  // Apply animation here
           >
-            <Typography variant="h1" component="h1" gutterBottom sx={{ color: 'white' }}>
-              <span className="flash">flushKardz</span>
-            </Typography>
-          </Box>
+            flushKardz
+          </Typography>
+        </Box>
         </Container>
       </Box>
     </>

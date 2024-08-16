@@ -1,4 +1,4 @@
-// flushKardz/app/flushKardz/page.js
+// flushKardz/app/play/page.js
 
 'use client'
 
@@ -75,7 +75,7 @@ const compareHands = (userHand, aiHand) => {
   return { winner: "Tie", message: "It's a tie!" };
 }
 
-export default function HitMeWithFlushKardz() {
+export default function play() {
   const { isLoaded, isSignedIn, user } = useUser()
   const [text, setText] = useState('Type words here to change Community’s flash/flushKardz')
   const [flushKardz, setFlushKardz] = useState([])
@@ -293,7 +293,7 @@ export default function HitMeWithFlushKardz() {
         sx={{
           width: '100vw',
           height: '100vh',
-          backgroundImage: 'url(hit_me_with_flushKardz.jpg)',
+          backgroundImage: 'url(play.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
@@ -317,7 +317,7 @@ export default function HitMeWithFlushKardz() {
               onKeyDown={handleKeyDown}
               fullWidth
               variant="outlined"
-              sx={{ backgroundColor: 'rgba(255, 255, 255, 0.8)', mb: 13 }}
+              sx={{ backgroundColor: 'rgba(255, 255, 255, 0.5)', mb: 13 }}
             />
           </Box>
 
@@ -466,6 +466,69 @@ export default function HitMeWithFlushKardz() {
 
         </Container>
       </Box>
+
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: 0,
+          left: 20,
+          width: '20%',
+          height: 'auto', // Adjust height as needed
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          zIndex: 1200,
+          display: 'flex',
+          alignItems: 'flex-start', // Align items to the top within the box
+          justifyContent: 'center',
+          flexDirection: 'column', // Ensure items stack vertically
+          padding: '16px', // Add padding if needed
+        }}
+      >
+        <Typography variant="h6" sx={{ color: 'black', fontWeight: 'bold' }}>Bought-In</Typography>
+        <Typography variant="body1" component="body1" gutterBottom sx={{ color: 'black', fontWeight: 'bold', fontSize: '1rem' }}>
+          1. Byl Zhevideos <br/>
+          2. Unk Unstoppable <br/>
+          3. Avvy Acem <br/>
+          4. Elgraphika Jymynyz <br/>
+          5. Rian Beawesyt <br/>
+          6. Myasuun Socalla <br/>
+          7. Izaahn Yahzeen <br/>
+          8. Infyna Julioon <br/>
+          9. Johonie Royalaflush <br/>
+          10. Wyna Wubya <br/>
+        </Typography>
+      </Box>
+
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: 0,
+          right: 10,
+          width: '20%',
+          height: 'auto', // Adjust height as needed
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          zIndex: 1200,
+          display: 'flex',
+          alignItems: 'flex-start', // Align items to the top within the box
+          justifyContent: 'center',
+          flexDirection: 'column', // Ensure items stack vertically
+          padding: '16px', // Add padding if needed
+        }}
+      >
+        <Typography variant="h6" sx={{ color: 'red', fontWeight: 'bold' }}>Signed-In</Typography>
+        <Typography variant="body1" component="body1" gutterBottom sx={{ color: 'red', fontWeight: 'bold', fontSize: '1rem' }}>
+          1. Yazzyn Yappa <br/>
+          2. Sajayya Swifties <br/>
+          3. Pharzee Pixela <br/>
+          4. Jaaak O'Brainian <br/>
+          5. Anjellyca Anucello <br/>
+          6. Fayzun Fiersum <br/>
+          7. Raaheed Fliashh <br/>
+          8. Naeaal Paanoola <br/>
+          9. Dyeno Daboot <br/>
+          10. Mesix Yujustavansed <br/>
+        </Typography>
+      </Box>
+
     </>
   )
 }
