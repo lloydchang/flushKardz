@@ -35,9 +35,9 @@ export async function POST(req) {
             product_data: {
               name: 'flushKardz.vercel.app',
             },
-            unit_amount: formatAmountForStripe(9.99, 'usd'),
+            unit_amount: formatAmountForStripe(0, 'usd'),
             recurring: {
-              interval: 'day',
+              interval: 'year',
               interval_count: 1,
             },
           },

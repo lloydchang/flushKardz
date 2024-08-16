@@ -10,7 +10,7 @@
 
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Box, Typography, AppBar, Toolbar, Button } from '@mui/material';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
@@ -21,6 +21,7 @@ import '../styles/globals.css';
 export default function Home() {
   const { isLoaded, isSignedIn } = useUser();
   const router = useRouter();
+  const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
 
   // Capture redirectTo parameter from URL query
   useEffect(() => {
@@ -32,6 +33,20 @@ export default function Home() {
       router.push(redirectTo);
     }
   }, [router]);
+
+  // Handle orientation changes
+  useEffect(() => {
+    const handleOrientationChange = () => {
+      setIsLandscape(window.innerWidth > window.innerHeight);
+    };
+
+    // Add event listener for orientation changes
+    window.addEventListener('resize', handleOrientationChange);
+    handleOrientationChange(); // Check initial orientation
+
+    // Cleanup the event listener on component unmount
+    return () => window.removeEventListener('resize', handleOrientationChange);
+  }, []);
 
   // Handle the Stripe checkout process
   const handleSubmit = async () => {
@@ -77,6 +92,28 @@ export default function Home() {
 
   return (
     <>
+      {isLandscape ? null : (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1300,
+          }}
+        >
+          <Typography variant="h4">
+            Please rotate your device to landscape mode for the best experience.
+          </Typography>
+        </Box>
+      )}
+
       <AppBar 
         position="absolute" 
         sx={{ 
@@ -205,7 +242,14 @@ export default function Home() {
           fontSize: '0.75rem',
         }}
       >
+      <Link
+        href="https://github.com/lloydchang/flushKardz/blob/main/public/flushKardz.vercel.app%20%C2%A9%202024%20Lloyd%20Chang.pdf"
+        target="_blank" // Opens the link in a new tab
+        rel="noopener noreferrer" // Adds security by preventing the new page from accessing the window object
+        underline="none" // Removes the underline from the link (optional)
+      >
         <Typography>© 2024 Lloyd Chang</Typography>
+      </Link>
       </Box>
     </>
   );

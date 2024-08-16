@@ -12,6 +12,8 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import PostHogInitializer from './PostHogInitializer'; // Import the client component
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
 
 const inter = Inter({ subsets: ['latin'] });
 
