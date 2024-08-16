@@ -76,7 +76,7 @@ const compareHands = (userHand, aiHand) => {
   return { winner: "Tie", message: "It's a tie!" };
 }
 
-export default function play() {
+export default function Play() {
   const { isLoaded, isSignedIn, user } = useUser()
   const [text, setText] = useState('Type words here to change Community’s flash/flushKardz')
   const [flushKardz, setFlushKardz] = useState([])
