@@ -1,48 +1,53 @@
-// flushKardz/page.js
-
 'use client';
 
 import React, { useEffect } from 'react';
 import { Container, Box, Typography, AppBar, Toolbar, Button } from '@mui/material';
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
-import '../styles/globals.css';
-import getStripe from '../utils/get-stripe';
-import Link from 'next/link';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import getStripe from '../utils/get-stripe';
+import '../styles/globals.css';
 
 export default function Home() {
   const { isLoaded, isSignedIn } = useUser();
   const router = useRouter();
-  
-  // Capture redirectTo parameter
+
+  // Capture redirectTo parameter from URL query
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const redirectTo = queryParams.get('redirectTo') || '/';
     
-    // Redirect to the specified URL if available and not the current page
+    // Redirect to the specified URL if it's not the current page
     if (redirectTo && redirectTo !== '/') {
       router.push(redirectTo);
     }
   }, [router]);
 
+  // Handle the Stripe checkout process
   const handleSubmit = async () => {
-    const checkoutSession = await fetch('/api/checkout_sessions', {
-      method: 'POST',
-      headers: { origin: 'http://localhost:3000' },
-    });
-    const checkoutSessionJson = await checkoutSession.json();
+    try {
+      // Call the API to create a checkout session
+      const response = await fetch('api/buy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }, // Set correct Content-Type
+      });
+      const checkoutSessionJson = await response.json();
 
-    const stripe = await getStripe();
-    const { error } = await stripe.redirectToCheckout({
-      sessionId: checkoutSessionJson.id,
-    });
+      // Get Stripe instance and redirect to checkout
+      const stripe = await getStripe();
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: checkoutSessionJson.id,
+      });
 
-    if (error) {
-      console.warn(error.message);
+      if (error) {
+        console.warn(error.message); // Log any errors
+      }
+    } catch (error) {
+      console.error('Error during checkout process:', error);
     }
   };
 
+  // Define styles for buttons
   const buttonStyle = {
     background: 'linear-gradient(45deg, #00c6ff, #0072ff)',
     borderRadius: 50, 
@@ -102,7 +107,7 @@ export default function Home() {
           </Button>
           <Button
             component={Link}
-            href={isSignedIn ? "/sign-out" : "/sign-in"} // Link to sign-out or sign-in page based on user status
+            href={isSignedIn ? "/sign-out" : "/sign-in"} // Conditional link based on user status
             color="inherit"
             sx={{ 
               background: 'linear-gradient(45deg, #00c6ff, #0072ff)',
@@ -126,7 +131,7 @@ export default function Home() {
               zIndex: 1200,
             }}
           >
-            {isSignedIn ? 'Sign-Out Twitch' : 'Sign-In Twitch'} {/* Display text based on user status */}
+            {isSignedIn ? 'Sign-Out Twitch' : 'Sign-In Twitch'}
           </Button>
         </Toolbar>
       </AppBar>
@@ -170,7 +175,7 @@ export default function Home() {
               variant="h1" 
               component="h1" 
               gutterBottom 
-              sx={{ color: 'white', animation: 'flash 2s infinite' }}  // Apply animation here
+              sx={{ color: 'white', animation: 'flash 2s infinite' }}
             >
               flushKardz
             </Typography>

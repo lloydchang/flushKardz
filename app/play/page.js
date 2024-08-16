@@ -207,7 +207,7 @@ export default function Play() {
         <Toolbar sx={{ width: '100%', justifyContent: 'center', position: 'relative' }}>
           <Button
             component={Link}
-            href="/" // Link to Buy-In
+            href="/api/buy" // Link to Buy-In
             sx={{ 
               background: 'linear-gradient(45deg, #00c6ff, #0072ff)',
               borderRadius: 50, 
