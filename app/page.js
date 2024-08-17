@@ -21,27 +21,29 @@ import '../styles/globals.css';
 export default function Home() {
   const { isLoaded, isSignedIn } = useUser();
   const router = useRouter();
-  const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const redirectTo = queryParams.get('redirectTo') || '/';
-    
-    if (redirectTo && redirectTo !== '/') {
-      router.push(redirectTo);
-    }
-  }, [router]);
+  const [isLandscape, setIsLandscape] = useState(false);
 
   useEffect(() => {
     const handleOrientationChange = () => {
       setIsLandscape(window.innerWidth > window.innerHeight);
     };
 
-    window.addEventListener('resize', handleOrientationChange);
     handleOrientationChange();
+    window.addEventListener('resize', handleOrientationChange);
 
     return () => window.removeEventListener('resize', handleOrientationChange);
   }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const queryParams = new URLSearchParams(window.location.search);
+      const redirectTo = queryParams.get('redirectTo') || '/';
+
+      if (redirectTo && redirectTo !== '/') {
+        router.push(redirectTo);
+      }
+    }
+  }, [router]);
 
   const handleSubmit = async () => {
     try {
@@ -81,9 +83,13 @@ export default function Home() {
     },
   };
 
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
-      {isLandscape ? null : (
+      {!isLandscape && (
         <Box
           sx={{
             position: 'fixed',
