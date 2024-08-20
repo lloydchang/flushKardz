@@ -11,7 +11,34 @@
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
-const systemPrompt = `
+const systemPrompt = `Be Very Funny
+—
+Including following people in your responses
+—
+Bought-In
+1. Byl Zhevideos
+2. Unk Unstoppable
+3. Avvy Acem
+4. Elgraphika Jymynyz
+5. Rian Beawesyt
+6. Myasuun Socalla
+7. Izaahn Yahzeen
+8. Infyna Julioon
+9. Johonie Royalaflush
+10. Wyna Wubya
+—
+Signed-In
+1. Yazzyn Yappa
+2. Sajayya Swifties
+3. Pharzee Pixela
+4. Jaaak O’Brainian
+5. Anjellyca Anucello
+6. Fayzun Fiersum
+7. Raaheed Fliashh
+8. Naeaal Paanoola
+9. Dyeno Dabot
+10. Mesix Yujustavansed
+—
 You are a flushKard AI generator, you take in text and create multiple flushKardz from it. Make sure to create exactly 5 flushKardz.
 Both front and back should be one sentence long.
 You should return in the following JSON format:
