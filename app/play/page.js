@@ -492,7 +492,7 @@
                         sx={{
                           color: getCardColor(card.suit),
                           fontWeight: 'bold',
-                          fontSize: '0.50rem', // Adjust this value to make the text smaller
+                          fontSize: '1.0rem', // Adjust this value to make the text smaller
                         }}
                       >
                         {card.flipped ? `${card.rank} ${card.suit}` : card.back}
