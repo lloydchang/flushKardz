@@ -531,7 +531,7 @@
           sx={{
             position: 'absolute',
             bottom: 0,
-            left: 20,
+            left: 0,
             width: '10%',
             height: 'auto', // Adjust height as needed
             backgroundColor: 'rgba(255, 255, 255, 0.5)',
@@ -550,7 +550,7 @@
             sx={{
               color: 'black',
               fontWeight: 'bold',
-              fontSize: '0.75rem', // Adjust this value to make the text smaller
+              fontSize: '0.50rem', // Adjust this value to make the text smaller
             }}
           >
             Bought-In</Typography>
@@ -561,7 +561,7 @@
             sx={{
               color: 'black',
               fontWeight: 'bold',
-              fontSize: '0.75rem', // Adjust this value to make the text smaller
+              fontSize: '0.50rem', // Adjust this value to make the text smaller
             }}
           >
             1. Byl Zhevideos <br/>
@@ -581,7 +581,7 @@
           sx={{
             position: 'absolute',
             bottom: 0,
-            right: 10,
+            right: 0,
             width: '10%',
             height: 'auto', // Adjust height as needed
             backgroundColor: 'rgba(255, 255, 255, 0.5)',
@@ -600,7 +600,7 @@
             sx={{
               color: 'red',
               fontWeight: 'bold',
-              fontSize: '0.75rem', // Adjust this value to make the text smaller
+              fontSize: '0.50rem', // Adjust this value to make the text smaller
             }}
           >
             Signed-In</Typography>
@@ -611,7 +611,7 @@
             sx={{
               color: 'red',
               fontWeight: 'bold',
-              fontSize: '0.75rem', // Adjust this value to make the text smaller
+              fontSize: '0.50rem', // Adjust this value to make the text smaller
             }}
           >
             1. Yazzyn Yappa <br/>
