@@ -13,7 +13,7 @@ import OpenAI from 'openai'
 
 const systemPrompt = `Be Very Funny
 —
-Including following people in your responses
+Include a few of the following people, in random sequences, change the order, in your responses
 —
 Bought-In
 1. Byl Zhevideos
