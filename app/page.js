@@ -34,7 +34,7 @@ export default function Home() {
         setShowWarning(true);
         setTimeout(() => {
           setShowWarning(false);
-        }, 3000); // 3 seconds
+        }, 1000); // 1 second
       }
     };
 

@@ -1,4 +1,4 @@
-// flushKardz/app/sign-out/[[...sign-out]]/page.js
+// flushKardz/app/sign-in/[[...sign-in]]/page.js
 
 /* Copyright (C) 2024 Lloyd Chang - All Rights Reserved
  * You may use, distribute and modify this code under the
@@ -61,28 +61,6 @@ export default function SignInPage() {
 
   return (
     <>
-      {isLandscape ? null : (
-        <Box
-          sx={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            color: 'white',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1300,
-          }}
-        >
-          <Typography variant="h4">
-            Please rotate your device to landscape mode for the best experience.
-          </Typography>
-        </Box>
-      )}
-
       <AppBar 
         position="absolute" 
         sx={{ 
