@@ -24,14 +24,23 @@ export default function Home() {
   const [isLandscape, setIsLandscape] = useState(false);
 
   useEffect(() => {
+    let timeoutId;
+    
     const handleOrientationChange = () => {
-      setIsLandscape(window.innerWidth > window.innerHeight);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        const orientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
+        setIsLandscape(orientation?.type.includes('landscape') || window.innerWidth > window.innerHeight);
+      }, 150); // 150ms delay to prevent excessive re-renders
     };
 
     handleOrientationChange();
     window.addEventListener('resize', handleOrientationChange);
 
-    return () => window.removeEventListener('resize', handleOrientationChange);
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', handleOrientationChange);
+    };
   }, []);
 
   useEffect(() => {
