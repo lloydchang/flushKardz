@@ -531,7 +531,7 @@
           sx={{
             position: 'absolute',
             bottom: 0,
-            left: -10,
+            left: -14,
             width: '10%',
             height: 'auto', // Adjust height as needed
             backgroundColor: 'rgba(255, 255, 255, 0.5)',
