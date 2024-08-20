@@ -198,6 +198,18 @@ export default function Home() {
           backgroundAttachment: 'fixed',
           backgroundRepeat: 'no-repeat',
           position: 'relative',
+          filter: 'saturate(50%)', // Reducing the saturation of the background image
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adding the semi-transparent overlay
+            zIndex: 1,
+            animation: 'pulseOverlay 2s infinite',
+          },
         }}
       >
         <Container 
@@ -209,6 +221,7 @@ export default function Home() {
             minHeight: '100vh',
             p: 2,
             position: 'relative',
+            zIndex: 2, // Ensuring content is above the overlay
           }}
         >
           <Box 
@@ -256,6 +269,20 @@ export default function Home() {
           <Typography>© 2024 Lloyd Chang</Typography>
         </Link>
       </Box>
+
+      <style jsx global>{`
+        @keyframes pulseOverlay {
+          0% {
+            background-color: rgba(0, 0, 0, 0.5);
+          }
+          50% {
+            background-color: rgba(0, 0, 0, 0.2);
+          }
+          100% {
+            background-color: rgba(0, 0, 0, 0.5);
+          }
+        }
+      `}</style>
     </>
   );
 }
