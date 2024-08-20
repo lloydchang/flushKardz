@@ -473,15 +473,15 @@
               </Grid>
             </Box>
 
-            <Box sx={{ mt: 4 }}>
-            <Grid container spacing={2}>
+            <Box sx={{ mt: 8 }}>
+            <Grid container spacing={1}>
               {flushKardz.map((card, index) => (
-                <Grid item xs={2} sm={2} md={4} key={index}>
+                <Grid item xs={4} sm={4} md={4} key={index}>
                   <Card
                     sx={{
                       backgroundColor: card.flipped ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 1)',
-                      border: '2px solid black',
-                      borderRadius: '8px',
+                      border: '0px solid black',
+                      borderRadius: '0px',
                       cursor: 'pointer',
                     }}
                     onClick={() => handleCardFlip(index)}
@@ -489,7 +489,11 @@
                     <CardContent sx={{ color: card.flipped ? 'black' : 'white' }}>
                       <Typography
                         variant="body1"
-                        sx={{ fontWeight: 'bold', fontSize: '1.2rem', color: getCardColor(card.suit) }}
+                        sx={{
+                          color: getCardColor(card.suit),
+                          fontWeight: 'bold',
+                          fontSize: '0.50rem', // Adjust this value to make the text smaller
+                        }}
                       >
                         {card.flipped ? `${card.rank} ${card.suit}` : card.back}
                       </Typography>
@@ -531,16 +535,16 @@
           sx={{
             position: 'absolute',
             bottom: 0,
-            left: -14,
+            left: 0,
             width: '10%',
             height: 'auto', // Adjust height as needed
             backgroundColor: 'rgba(255, 255, 255, 0.5)',
             zIndex: 1200,
             display: 'flex',
             alignItems: 'flex-start', // Align items to the top within the box
-            justifyContent: 'center',
+            justifyContent: 'left',
             flexDirection: 'column', // Ensure items stack vertically
-            padding: '16px', // Add padding if needed
+            padding: '0px', // Add padding if needed
           }}
         >
           <Typography
@@ -551,29 +555,20 @@
               color: 'black',
               fontWeight: 'bold',
               fontSize: '0.50rem', // Adjust this value to make the text smaller
+              textAlign: 'left', // Add this property to left-align the text
             }}
           >
-            Bought-In</Typography>
-          <Typography
-            variant="body1"
-            component="body1"
-            gutterBottom
-            sx={{
-              color: 'black',
-              fontWeight: 'bold',
-              fontSize: '0.50rem', // Adjust this value to make the text smaller
-            }}
-          >
-            1. Byl Zhevideos <br/>
-            2. Unk Unstoppable <br/>
-            3. Avvy Acem <br/>
-            4. Elgraphika Jymynyz <br/>
-            5. Rian Beawesyt <br/>
-            6. Myasuun Socalla <br/>
-            7. Izaahn Yahzeen <br/>
-            8. Infyna Julioon <br/>
-            9. Johonie Royalaflush <br/>
-            10. Wyna Wubya <br/>
+            Bought-In<br/>
+            9 Byl Zhevideos <br/>
+            8 Unk Unstoppable <br/>
+            7 Avvy Acem <br/>
+            6 Elgraphika Jymynyz <br/>
+            5 Rian Beawesyt <br/>
+            4 Myasuun Socalla <br/>
+            3 Izaahn Yahzeen <br/>
+            2 Infyna Julioon <br/>
+            1 Johonie Royalaflush <br/>
+            0 Wyna Wubya <br/>
           </Typography>
         </Box>
 
@@ -581,18 +576,19 @@
           sx={{
             position: 'absolute',
             bottom: 0,
-            right: 0,
+            right: -28,
             width: '10%',
             height: 'auto', // Adjust height as needed
             backgroundColor: 'rgba(255, 255, 255, 0.5)',
             zIndex: 1200,
             display: 'flex',
             alignItems: 'flex-start', // Align items to the top within the box
-            justifyContent: 'center',
+            justifyContent: 'right',
             flexDirection: 'column', // Ensure items stack vertically
-            padding: '16px', // Add padding if needed
+            padding: '0px', // Add padding if needed
           }}
         >
+
           <Typography
             variant="body1"
             component="body1"
@@ -601,29 +597,20 @@
               color: 'red',
               fontWeight: 'bold',
               fontSize: '0.50rem', // Adjust this value to make the text smaller
+              textAlign: 'right', // Add this property to right-align the text
             }}
           >
-            Signed-In</Typography>
-          <Typography
-            variant="body1"
-            component="body1"
-            gutterBottom
-            sx={{
-              color: 'red',
-              fontWeight: 'bold',
-              fontSize: '0.50rem', // Adjust this value to make the text smaller
-            }}
-          >
-            1. Yazzyn Yappa <br/>
-            2. Sajayya Swifties <br/>
-            3. Pharzee Pixela <br/>
-            4. Jaaak O’Brainian <br/>
-            5. Anjellyca Anucello <br/>
-            6. Fayzun Fiersum <br/>
-            7. Raaheed Fliashh <br/>
-            8. Naeaal Paanoola <br/>
-            9. Dyeno Dabot <br/>
-            10. Mesix Yujustavansed <br/>
+            Signed-In<br/>
+            Yazzyn Yappa 9<br/>
+            Sajayya Swifties 8<br/>
+            Pharzee Pixela 7<br/>
+            Jaaak O’Brainian 6<br/>
+            Anjellyca Anucello 5<br/>
+            Fayzun Fiersum 4<br/>
+            Raaheed Fliashh 3<br/>
+            Naeaal Paanoola 2<br/>
+            Dyeno Dabot 1<br/>
+            Mesix Yujustavansed 0<br/>
           </Typography>
         </Box>
 
