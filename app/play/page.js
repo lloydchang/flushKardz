@@ -106,7 +106,7 @@
           setShowWarning(true);
           setTimeout(() => {
             setShowWarning(false);
-          }, 3000); // 3 seconds
+          }, 1000); // 1 second
         }
       };
 
@@ -532,7 +532,7 @@
             position: 'absolute',
             bottom: 0,
             left: 20,
-            width: '20%',
+            width: '10%',
             height: 'auto', // Adjust height as needed
             backgroundColor: 'rgba(255, 255, 255, 0.5)',
             zIndex: 1200,
@@ -543,8 +543,27 @@
             padding: '16px', // Add padding if needed
           }}
         >
-          <Typography variant="h6" sx={{ color: 'black', fontWeight: 'bold' }}>Bought-In</Typography>
-          <Typography variant="body1" component="body1" gutterBottom sx={{ color: 'black', fontWeight: 'bold', fontSize: '1rem' }}>
+          <Typography
+            variant="body1"
+            component="body1"
+            gutterBottom
+            sx={{
+              color: 'black',
+              fontWeight: 'bold',
+              fontSize: '0.75rem', // Adjust this value to make the text smaller
+            }}
+          >
+            Bought-In</Typography>
+          <Typography
+            variant="body1"
+            component="body1"
+            gutterBottom
+            sx={{
+              color: 'black',
+              fontWeight: 'bold',
+              fontSize: '0.75rem', // Adjust this value to make the text smaller
+            }}
+          >
             1. Byl Zhevideos <br/>
             2. Unk Unstoppable <br/>
             3. Avvy Acem <br/>
@@ -563,7 +582,7 @@
             position: 'absolute',
             bottom: 0,
             right: 10,
-            width: '20%',
+            width: '10%',
             height: 'auto', // Adjust height as needed
             backgroundColor: 'rgba(255, 255, 255, 0.5)',
             zIndex: 1200,
@@ -574,8 +593,27 @@
             padding: '16px', // Add padding if needed
           }}
         >
-          <Typography variant="h6" sx={{ color: 'red', fontWeight: 'bold' }}>Signed-In</Typography>
-          <Typography variant="body1" component="body1" gutterBottom sx={{ color: 'red', fontWeight: 'bold', fontSize: '1rem' }}>
+          <Typography
+            variant="body1"
+            component="body1"
+            gutterBottom
+            sx={{
+              color: 'red',
+              fontWeight: 'bold',
+              fontSize: '0.75rem', // Adjust this value to make the text smaller
+            }}
+          >
+            Signed-In</Typography>
+          <Typography
+            variant="body1"
+            component="body1"
+            gutterBottom
+            sx={{
+              color: 'red',
+              fontWeight: 'bold',
+              fontSize: '0.75rem', // Adjust this value to make the text smaller
+            }}
+          >
             1. Yazzyn Yappa <br/>
             2. Sajayya Swifties <br/>
             3. Pharzee Pixela <br/>
