@@ -93,7 +93,28 @@
     const [artificialIntelligenceHand, setArtificialIntelligenceHand] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [winner, setWinner] = useState('')
-    const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
+    const [isLandscape, setIsLandscape] = useState(true);
+    const [showWarning, setShowWarning] = useState(false);
+
+    useEffect(() => {
+      // Check if the window is in landscape mode
+      const handleOrientationChange = () => {
+        const isCurrentlyLandscape = window.matchMedia('(orientation: landscape)').matches;
+        setIsLandscape(isCurrentlyLandscape);
+
+        if (!isCurrentlyLandscape) {
+          setShowWarning(true);
+          setTimeout(() => {
+            setShowWarning(false);
+          }, 3000); // 3 seconds
+        }
+      };
+
+      handleOrientationChange();
+      window.addEventListener('resize', handleOrientationChange);
+
+      return () => window.removeEventListener('resize', handleOrientationChange);
+    }, []);
 
     // Handle orientation changes
     useEffect(() => {
@@ -251,6 +272,30 @@
             }}
           >
             <Typography variant="h4">
+              Please rotate your device to landscape mode for the best experience.
+            </Typography>
+          </Box>
+        )}
+
+        {showWarning && (
+          <Box
+            sx={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 1300,
+              textAlign: 'center',
+              padding: '1rem',
+            }}
+          >
+            <Typography variant="h6">
               Please rotate your device to landscape mode for the best experience.
             </Typography>
           </Box>
