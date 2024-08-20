@@ -1,3 +1,5 @@
+// flushKardz/page.js
+
 /* Copyright (C) 2024 Lloyd Chang - All Rights Reserved
  * You may use, distribute and modify this code under the
  * terms of the AGPLv3 license.
@@ -8,7 +10,7 @@
 
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Box, Typography, AppBar, Toolbar, Button } from '@mui/material';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
@@ -19,6 +21,28 @@ import '../styles/globals.css';
 export default function Home() {
   const { isLoaded, isSignedIn } = useUser();
   const router = useRouter();
+  const [isLandscape, setIsLandscape] = useState(true);
+  const [showWarning, setShowWarning] = useState(false);
+
+  useEffect(() => {
+    // Check if the window is in landscape mode
+    const handleOrientationChange = () => {
+      const isCurrentlyLandscape = window.matchMedia('(orientation: landscape)').matches;
+      setIsLandscape(isCurrentlyLandscape);
+      
+      if (!isCurrentlyLandscape) {
+        setShowWarning(true);
+        setTimeout(() => {
+          setShowWarning(false);
+        }, 3000); // 3 seconds
+      }
+    };
+
+    handleOrientationChange();
+    window.addEventListener('resize', handleOrientationChange);
+
+    return () => window.removeEventListener('resize', handleOrientationChange);
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -75,6 +99,30 @@ export default function Home() {
 
   return (
     <>
+      {showWarning && (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1300,
+            textAlign: 'center',
+            padding: '1rem',
+          }}
+        >
+          <Typography variant="h6">
+            Please rotate your device to landscape mode for the best experience.
+          </Typography>
+        </Box>
+      )}
+
       <AppBar 
         position="absolute" 
         sx={{ 
