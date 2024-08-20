@@ -1,4 +1,4 @@
-// flushKardz/app/sign-in/[[...sign-in]]/page.js
+// flushKardz/app/sign-out/[[...sign-out]]/page.js
 
 /* Copyright (C) 2024 Lloyd Chang - All Rights Reserved
  * You may use, distribute and modify this code under the
@@ -27,21 +27,6 @@ export default function SignInPage() {
   const { user, isLoaded } = useUser();
   const { signOut } = useClerk();
   const router = useRouter();
-  const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
-
-  // Handle orientation changes
-  useEffect(() => {
-    const handleOrientationChange = () => {
-      setIsLandscape(window.innerWidth > window.innerHeight);
-    };
-
-    // Add event listener for orientation changes
-    window.addEventListener('resize', handleOrientationChange);
-    handleOrientationChange(); // Check initial orientation
-
-    // Cleanup the event listener on component unmount
-    return () => window.removeEventListener('resize', handleOrientationChange);
-  }, []);
 
   useEffect(() => {
     if (isLoaded && user) {
@@ -54,10 +39,22 @@ export default function SignInPage() {
     }
   }, [isLoaded, user, signOut, router]);
 
-  if (!isLoaded || user) {
-    // Render nothing or a loading state while checking authentication status
-    return null;
-  }
+  const buttonStyle = {
+    background: 'linear-gradient(45deg, #00c6ff, #0072ff)',
+    borderRadius: 50,
+    px: 4,
+    py: 2,
+    fontSize: '1.5rem',
+    color: 'white',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+    textTransform: 'uppercase',
+    letterSpacing: 1.2,
+    transition: '0.3s',
+    '&:hover': {
+      background: 'linear-gradient(45deg, #0072ff, #00c6ff)',
+      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
+    },
+  };
 
   return (
     <>
@@ -72,24 +69,14 @@ export default function SignInPage() {
         }}
       >
         <Toolbar sx={{ width: '100%', justifyContent: 'center', position: 'relative' }}>
-          <Button
+        <Button
             component={Link}
             href={`/play?redirectTo=${encodeURIComponent('/play')}`} // Pass the redirect URL as a query parameter
             sx={{ 
-              background: 'linear-gradient(45deg, #00c6ff, #0072ff)',
-              borderRadius: 50, 
-              px: 4, 
-              py: 2, 
-              fontSize: '1.5rem', 
-              color: 'white',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-              textTransform: 'uppercase',
-              letterSpacing: 1.2,
-              transition: '0.3s',
-              '&:hover': {
-                background: 'linear-gradient(45deg, #0072ff, #00c6ff)',
-                boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
-              },
+              ...buttonStyle,
+              fontSize: '1rem', 
+              px: 2, 
+              py: 1,
               position: 'absolute',
               top: 16,
               left: '50%',
@@ -115,16 +102,35 @@ export default function SignInPage() {
           flexDirection: 'column',
           p: 2,
           overflow: 'hidden',
+          position: 'relative',
+          filter: 'saturate(50%)', // Reducing the saturation of the background image
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adding the semi-transparent overlay
+            zIndex: 1,
+            animation: 'pulseOverlay 1s infinite',
+          },
         }}
       >
-        <Container 
-          maxWidth="sm" 
-          sx={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            height: '100%', 
-            p: 2, 
-            '&::-webkit-scrollbar': { display: 'none' },
+        <Container
+          maxWidth="sm"
+          sx={{
+            alignItems: 'center',   
+            justifyContent: 'center',   
+            minHeight: '100vh',
+            overflow: 'auto',
+            display: 'flex',
+            flexDirection: 'column',            
+            height: '100%',
+            p: 20,
+            position: 'relative',
+            '&::-webkit-scrollbar': { display: 'none' }, // Hiding the scrollbar
+            zIndex: 2, // Ensuring content is above the overlay
           }}
         >
           <Box sx={{ flexGrow: 1 }} /> {/* Pushes SignIn component to the bottom */}
@@ -160,6 +166,19 @@ export default function SignInPage() {
         <Typography>© 2024 Lloyd Chang</Typography>
       </Link>
       </Box>
+      <style jsx global>{`
+        @keyframes pulseOverlay {
+          0% {
+            background-color: rgba(0, 0, 0, 0.5);
+          }
+          50% {
+            background-color: rgba(0, 0, 0, 0.2);
+          }
+          100% {
+            background-color: rgba(0, 0, 0, 0.5);
+          }
+        }
+      `}</style>
     </>
   );
 }

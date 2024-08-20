@@ -93,10 +93,6 @@ export default function Home() {
     },
   };
 
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <>
       {showWarning && (

@@ -308,7 +308,7 @@
           </Button>
           <Button
             component={Link}
-            href="/"
+            href="/api/buy"
             sx={{ 
               ...buttonStyle,
               fontSize: '1rem', 
@@ -359,9 +359,35 @@
             justifyContent: 'center',
             p: 2,
             overflow: 'hidden',
+            position: 'relative',
+            filter: 'saturate(50%)', // Reducing the saturation of the background image
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adding the semi-transparent overlay
+              zIndex: 1,
+              animation: 'pulseOverlay 10s infinite',
+            },
           }}
         >
-          <Container maxWidth="sm" sx={{ overflow: 'auto', height: '100%', p: 2, '&::-webkit-scrollbar': { display: 'none' } }}>
+          <Container
+            maxWidth="sm"
+            sx={{
+              alignItems: 'center',   
+              justifyContent: 'center',   
+              minHeight: '100vh',
+              overflow: 'auto',
+              height: '100%',
+              p: 2,
+              position: 'relative',
+              '&::-webkit-scrollbar': { display: 'none' }, // Hiding the scrollbar
+              zIndex: 2, // Ensuring content is above the overlay
+            }}
+          >
             <Box sx={{ my: 2, mt: 10 }}>
               <Typography variant="h3" component="h1" gutterBottom sx={{ color: 'white', fontWeight: 'bold', fontSize: '3rem' }}>
                 Hit me with flushKardz
@@ -634,7 +660,21 @@
         >
           <Typography>© 2024 Lloyd Chang</Typography>
         </Link>
-        </Box>
-      </>
-    )
-  }
+      </Box>
+
+      <style jsx global>{`
+        @keyframes pulseOverlay {
+          0% {
+            background-color: rgba(0, 0, 0, 0.5);
+          }
+          50% {
+            background-color: rgba(0, 0, 0, 0.2);
+          }
+          100% {
+            background-color: rgba(0, 0, 0, 0.5);
+          }
+        }
+      `}</style>
+    </>
+  );
+}
