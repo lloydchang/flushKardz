@@ -21,26 +21,19 @@ import '../styles/globals.css';
 export default function Home() {
   const { isLoaded, isSignedIn } = useUser();
   const router = useRouter();
-  const [isLandscape, setIsLandscape] = useState(false);
+  const [isLandscape, setIsLandscape] = useState(true);
 
   useEffect(() => {
-    let timeoutId;
-    
+    // Check if the window is in landscape mode
     const handleOrientationChange = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        const orientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
-        setIsLandscape(orientation?.type.includes('landscape') || window.innerWidth > window.innerHeight);
-      }, 150); // 150ms delay to prevent excessive re-renders
+      const isCurrentlyLandscape = window.matchMedia('(orientation: landscape)').matches;
+      setIsLandscape(isCurrentlyLandscape);
     };
 
     handleOrientationChange();
     window.addEventListener('resize', handleOrientationChange);
 
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener('resize', handleOrientationChange);
-    };
+    return () => window.removeEventListener('resize', handleOrientationChange);
   }, []);
 
   useEffect(() => {
