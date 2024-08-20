@@ -290,8 +290,10 @@
         }}
       >
         <Toolbar sx={{ width: '100%', justifyContent: 'center', position: 'relative' }}>
-          <Button
-            onClick={handleSubmit}
+        <Button
+            component={Link}
+            href="/api/buy"
+            color="inherit"
             sx={{ 
               ...buttonStyle,
               fontSize: '1rem', 
@@ -308,7 +310,7 @@
           </Button>
           <Button
             component={Link}
-            href="/api/buy"
+            href="/"
             sx={{ 
               ...buttonStyle,
               fontSize: '1rem', 
