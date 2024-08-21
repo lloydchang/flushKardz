@@ -39,6 +39,7 @@ export async function POST(req) {
             currency: 'usd',
             product_data: {
               name: 'flushKardz.vercel.app',
+              images: ['https://flushkardz.vercel.app/flushKardz.jpg'], // Added product image URL
             },
             unit_amount: formatAmountForStripe(0, 'usd'),
             recurring: {
@@ -49,8 +50,8 @@ export async function POST(req) {
           quantity: 1,
         },
       ],
-      success_url: `${referer}result?session_id={CHECKOUT_SESSION_ID}`, // Stripe will replace this placeholder
-      cancel_url: `${referer}result?session_id={CHECKOUT_SESSION_ID}`, // Stripe will replace this placeholder
+      success_url: `${referer}?redirectTo=/success`,
+      cancel_url: `${referer}?redirectTo=/cancel`,
     };
 
     // Log params before creating checkout session
