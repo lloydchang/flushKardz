@@ -242,6 +242,34 @@ export default function Home() {
             </Typography>
           </Box>
         </Container>
+
+        {/* YouTube video embed */}
+        <Box
+          sx={{
+            mt: 4,
+            maxWidth: '100%',
+            maxHeight: '100%',
+            position: 'relative',
+            width: '1080px', // Fixed width
+            height: '1920px', // Fixed height
+            zIndex: 3, // Ensure the video container is on top
+          }}
+        >
+          <iframe
+            src="https://www.youtube.com/embed/CF0IOFv4rY8?autoplay=1&muted=1"
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{ 
+              position: 'absolute', 
+              top: 0, 
+              left: 0, 
+              width: '100%', 
+              height: '100%', 
+              border: 'none' 
+            }}
+          ></iframe>
+        </Box>
       </Box>
 
       <Box 
