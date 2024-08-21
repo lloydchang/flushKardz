@@ -8,15 +8,25 @@
  * this file. If not, please visit: https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { loadStripe } from '@stripe/stripe-js'
+import { loadStripe } from '@stripe/stripe-js';
 
-let stripePromise
+// Initialize a cache for the Stripe instance
+let stripePromise;
 
+/**
+ * Get the Stripe instance. This function ensures that the Stripe object is only
+ * created once and reused in subsequent calls.
+ * 
+ * @returns {Promise<Stripe | null>} The Stripe instance.
+ */
 const getStripe = () => {
+  // If the Stripe instance has not been created yet, create it
   if (!stripePromise) {
-    stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+    // Load Stripe using the public key from environment variables
+    stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
   }
-  return stripePromise
-}
+  // Return the cached Stripe instance
+  return stripePromise;
+};
 
-export default getStripe
+export default getStripe;

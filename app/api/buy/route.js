@@ -1,4 +1,4 @@
-// flushKardz/app/api/checkout_sessions.js
+// flushKardz/app/api/buy/route.js
 
 /* Copyright (C) 2024 Lloyd Chang - All Rights Reserved
  * You may use, distribute and modify this code under the
@@ -22,8 +22,13 @@ const formatAmountForStripe = (amount, currency) => {
 
 export async function POST(req) {
   try {
-    // Retrieve the referer URL to construct success and cancel URLs
+    // Log the referer header for debugging
     const referer = req.headers.get('referer') || 'http://localhost:3000';
+    console.log('Referer URL:', referer);
+
+    // Log the request method and headers
+    console.log('Request Method:', req.method);
+    console.log('Request Headers:', req.headers);
 
     const params = {
       mode: 'subscription',
@@ -44,26 +49,55 @@ export async function POST(req) {
           quantity: 1,
         },
       ],
-      success_url: `${referer}result?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${referer}result?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${referer}result?session_id={CHECKOUT_SESSION_ID}`, // Stripe will replace this placeholder
+      cancel_url: `${referer}result?session_id={CHECKOUT_SESSION_ID}`, // Stripe will replace this placeholder
     };
+
+    // Log params before creating checkout session
+    console.log('Checkout Session Params:', params);
 
     // Create a checkout session with Stripe
     const checkoutSession = await stripe.checkout.sessions.create(params);
+
+    // Log the checkout session details
+    console.log('Checkout Session Created:', checkoutSession);
 
     // Return the session ID as a JSON response
     return NextResponse.json(checkoutSession, { status: 200 });
   } catch (error) {
     console.error('Error creating checkout session:', error);
-    return new NextResponse(
-      JSON.stringify({ error: { message: error.message } }),
-      { status: 500 }
-    );
+
+    // Handle specific Stripe error types
+    if (error.type === 'StripeInvalidRequestError') {
+      return NextResponse.json(
+        { error: { message: 'Invalid request parameters' } },
+        { status: 400 }
+      );
+    } else if (error.type === 'StripeConnectionError') {
+      return NextResponse.json(
+        { error: { message: 'Unable to connect to Stripe' } },
+        { status: 500 }
+      );
+    } else if (error.response && error.response.data) {
+      // Handle unexpected responses
+      return NextResponse.json(
+        { error: { message: 'Unexpected response from Stripe' } },
+        { status: 500 }
+      );
+    } else {
+      return NextResponse.json(
+        { error: { message: 'An unexpected error occurred' } },
+        { status: 500 }
+      );
+    }
   }
 }
 
 export async function GET(req) {
   try {
+    // Log the query parameters for debugging
+    console.log('Query Params:', req.nextUrl.searchParams.toString());
+
     // Retrieve the session ID from the query parameters
     const searchParams = req.nextUrl.searchParams;
     const sessionId = searchParams.get('session_id');
@@ -75,10 +109,36 @@ export async function GET(req) {
     // Retrieve the checkout session from Stripe
     const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
 
+    // Log the retrieved checkout session details
+    console.log('Checkout Session Retrieved:', checkoutSession);
+
     // Return the checkout session details as a JSON response
     return NextResponse.json(checkoutSession);
   } catch (error) {
     console.error('Error retrieving checkout session:', error);
-    return NextResponse.json({ error: { message: error.message } }, { status: 500 });
+
+    // Handle specific Stripe error types
+    if (error.type === 'StripeInvalidRequestError') {
+      return NextResponse.json(
+        { error: { message: 'Invalid request parameters' } },
+        { status: 400 }
+      );
+    } else if (error.type === 'StripeConnectionError') {
+      return NextResponse.json(
+        { error: { message: 'Unable to connect to Stripe' } },
+        { status: 500 }
+      );
+    } else if (error.response && error.response.data) {
+      // Handle unexpected responses
+      return NextResponse.json(
+        { error: { message: 'Unexpected response from Stripe' } },
+        { status: 500 }
+      );
+    } else {
+      return NextResponse.json(
+        { error: { message: 'An unexpected error occurred' } },
+        { status: 500 }
+      );
+    }
   }
 }
