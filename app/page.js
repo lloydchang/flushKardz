@@ -256,7 +256,7 @@ export default function Home() {
           }}
         >
           <iframe
-            src="https://www.youtube.com/embed/CF0IOFv4rY8?autoplay=1&muted=1"
+            src="https://www.youtube.com/embed/CF0IOFv4rY8?autoplay=1"
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
