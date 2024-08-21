@@ -10,14 +10,20 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    async rewrites() {
-      return [
-        {
-          source: '/result/:path*',
-          destination: '/result',
-        },
-      ];
-    },
-  };
-  
-  export default nextConfig;
+  async redirects() {
+    return [
+      {
+        source: '/success',
+        destination: '/result?redirectTo=success',
+        permanent: false,
+      },
+      {
+        source: '/cancel',
+        destination: '/result?redirectTo=cancel',
+        permanent: false,
+      },
+    ];
+  },
+};
+
+export default nextConfig;

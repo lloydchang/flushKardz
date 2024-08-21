@@ -1,4 +1,4 @@
-// flushKardz/app/sign-in/[[...sign-in]]/page.js
+// flushKardz/app/sign-out/[[...sign-in]]/page.js
 
 /* Copyright (C) 2024 Lloyd Chang - All Rights Reserved
  * You may use, distribute and modify this code under the
@@ -28,6 +28,9 @@ export default function SignInPage() {
   const { signOut } = useClerk();
   const router = useRouter();
 
+  // Determine if the user is signed in
+  const isSignedIn = isLoaded && user;
+
   useEffect(() => {
     if (isLoaded && user) {
       // User is signed in, sign them out and redirect
@@ -56,6 +59,12 @@ export default function SignInPage() {
     },
   };
 
+  const handleSubmit = () => {
+    // Define what should happen when the button is clicked
+    console.log('Buy-In Stripe button clicked');
+    // You can perform additional actions here, such as redirecting or making API calls
+  };
+
   return (
     <>
       <AppBar 
@@ -69,9 +78,25 @@ export default function SignInPage() {
         }}
       >
         <Toolbar sx={{ width: '100%', justifyContent: 'center', position: 'relative' }}>
-        <Button
+          <Button
+            onClick={handleSubmit}
+            sx={{ 
+              ...buttonStyle,
+              fontSize: '1rem', 
+              px: 2, 
+              py: 1,
+              position: 'absolute',
+              top: 16,
+              left: '25%',
+              transform: 'translateX(-50%)',
+              zIndex: 1200,
+            }}
+          >
+            Buy-In Stripe
+          </Button>
+          <Button
             component={Link}
-            href={`/play?redirectTo=${encodeURIComponent('/play')}`} // Pass the redirect URL as a query parameter
+            href="/play"
             sx={{ 
               ...buttonStyle,
               fontSize: '1rem', 
@@ -86,6 +111,24 @@ export default function SignInPage() {
           >
             Play
           </Button>
+          {/* <Button
+            component={Link}
+            href={isSignedIn ? "/sign-out" : "/sign-in"}
+            color="inherit"
+            sx={{ 
+              ...buttonStyle,
+              fontSize: '1rem', 
+              px: 2, 
+              py: 1,
+              position: 'absolute',
+              top: 16,
+              right: '25%',
+              transform: 'translateX(50%)',
+              zIndex: 1200,
+            }}
+          >
+            {isSignedIn ? 'Sign-Out Twitch' : 'Sign-In Twitch'}
+          </Button> */}
         </Toolbar>
       </AppBar>
 
