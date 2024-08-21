@@ -66,7 +66,7 @@ export async function POST(req) {
     // Return the session ID as a JSON response
     return NextResponse.json(checkoutSession, { status: 200 });
   } catch (error) {
-    console.error('Error creating checkout session:', error);
+    console.error('Error creating checkout session:', JSON.stringify(error, null, 2));
 
     // Handle specific Stripe error types
     if (error.type === 'StripeInvalidRequestError') {
@@ -116,7 +116,7 @@ export async function GET(req) {
     // Return the checkout session details as a JSON response
     return NextResponse.json(checkoutSession);
   } catch (error) {
-    console.error('Error retrieving checkout session:', error);
+    console.error('Error retrieving checkout session:', JSON.stringify(error, null, 2));
 
     // Handle specific Stripe error types
     if (error.type === 'StripeInvalidRequestError') {
